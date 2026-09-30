@@ -1,12 +1,262 @@
-body {
-    font-family: Arial, sans-serif;
+/* =========================
+   Reset
+   ========================= */
+
+* {
+    box-sizing: border-box;
     margin: 0;
-    padding: 2rem;
-    background: #f4f4f4;
-    color: #222;
+    padding: 0;
 }
 
-main {
-    max-width: 900px;
+
+/* =========================
+   Body
+   ========================= */
+
+body {
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background-color: #f4f6f8;
+
+    color: #1f2937;
+
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* =========================
+   Header / Navigation
+   ========================= */
+
+header {
+    background-color: #1e293b;
+
+    width: 100%;
+}
+
+
+nav {
+    max-width: 1200px;
+
     margin: 0 auto;
+
+    padding: 1rem 2rem;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 2rem;
+}
+
+
+nav a {
+    color: white;
+
+    text-decoration: none;
+
+    font-size: 1rem;
+
+    font-weight: 500;
+
+    transition:
+        color 0.2s ease;
+}
+
+
+nav a:hover {
+    color: #60a5fa;
+}
+
+
+/* =========================
+   Main
+   ========================= */
+
+main {
+    flex: 1;
+
+    width: 100%;
+
+    max-width: 1200px;
+
+    margin: 0 auto;
+
+    padding: 3rem 2rem;
+}
+
+
+/* =========================
+   Home Page
+   ========================= */
+
+.home-container {
+    max-width: 700px;
+
+    margin: 0 auto;
+
+    text-align: center;
+}
+
+
+.home-container h1 {
+    font-size: 2.5rem;
+
+    margin-bottom: 1rem;
+}
+
+
+.home-container p {
+    font-size: 1.1rem;
+
+    color: #64748b;
+
+    margin-bottom: 2rem;
+}
+
+
+/* =========================
+   Upload Box
+   ========================= */
+
+.upload-box {
+    background-color: white;
+
+    padding: 2rem;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 4px 12px
+        rgba(0, 0, 0, 0.08);
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 1rem;
+}
+
+
+#pdf-file {
+    width: 100%;
+
+    padding: 0.75rem;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 6px;
+
+    background-color: #f9fafb;
+}
+
+
+/* =========================
+   Buttons
+   ========================= */
+
+button {
+    padding: 0.75rem 1.5rem;
+
+    border: none;
+
+    border-radius: 6px;
+
+    background-color: #2563eb;
+
+    color: white;
+
+    font-size: 1rem;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease;
+}
+
+
+button:hover {
+    background-color: #1d4ed8;
+}
+
+
+button:disabled {
+    background-color: #9ca3af;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================
+   Status Message
+   ========================= */
+
+#status {
+    margin-top: 1.5rem;
+
+    font-size: 1rem;
+}
+
+
+/* =========================
+   Footer
+   ========================= */
+
+footer {
+    background-color: #1e293b;
+
+    color: #cbd5e1;
+
+    text-align: center;
+
+    padding: 1.5rem;
+}
+
+
+footer p {
+    margin: 0;
+
+    color: #cbd5e1;
+}
+
+
+/* =========================
+   Mobile
+   ========================= */
+
+@media (max-width: 600px) {
+
+    nav {
+        padding: 1rem;
+
+        gap: 1rem;
+
+        flex-wrap: wrap;
+    }
+
+
+    main {
+        padding: 2rem 1rem;
+    }
+
+
+    .home-container h1 {
+        font-size: 2rem;
+    }
+
+
+    .upload-box {
+        padding: 1.5rem;
+    }
+
 }

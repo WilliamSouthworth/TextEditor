@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+
+
+{% block title %}
+Home - Text Editor
+{% endblock %}
+
+
+{% block content %}
+
+<section class="home-container">
+
+    <h1>
+        Text Editor
+    </h1>
+
+    <p>
+        Upload a PDF to begin.
+    </p>
+
+
+    <form id="upload-form">
+
+        <div class="upload-box">
+
+            <input
+                type="file"
+                id="pdf-file"
+                accept=".pdf,application/pdf"
+            >
+
+            <button type="submit">
+                Upload PDF
+            </button>
+
+        </div>
+
+    </form>
+
+
+    <div id="status"></div>
+
+</section>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script
+    src="{{ url_for('static', filename='js/home.js') }}"
+></script>
+
+{% endblock %}
