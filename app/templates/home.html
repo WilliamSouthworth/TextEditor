@@ -14,13 +14,17 @@
         - If there is only one pdf upload then the "Merge" card should be grayed out
 
     Problems:
-        - We need to change all the buttons from cards into <a> tages
-        that way it sends to another page, we have to update the routing for
-        it as well so the functionality remains the same
+        - We need to have a way for the pdf(s) to persist even after refresh, especially
+        when the user goes to another page from the card selections
+        - Right now everytime a user uploads a pdf it is saved to the application itself,
+        we need to either have it saved to the uesrs session instead or have the pdf
+        saved to the application but it is removed automatically wither after the cache is cleared
+        or after a certain amount of time (maybe one of the libraries have this?)
     
     Stuff to add:
         - A way for users to upload multiple pdfs rather than just one then a way for users
         to switch between the pdfs they uploaded 
+        - 
 -->
 
 
@@ -245,197 +249,157 @@ Home - Text Editor
 
                 <!-- Edit -->
 
-                <button
-                    type="button"
-                    class="action-card"
+                <a
+                href="{{ url_for('editor.edit') }}"
+                class="action-card"
                 >
 
-                    <div class="action-icon blue">
-                        ✎
-                    </div>
+                <div class="action-icon blue">
+                    ✎
+                </div>
 
+                <div class="action-text">
 
-                    <div class="action-text">
+                    <strong>
+                        Edit
+                    </strong>
 
-                        <strong>
-                            Edit
-                        </strong>
-
-                        <span>
-                            Edit text, highlight, or enhance your PDF with various tools
-                        </span>
-
-                    </div>
-
-
-                    <span class="arrow">
-                        →
+                    <span>
+                        Edit text, highlight, or enhance your PDF with various tools
                     </span>
 
-                </button>
+                </div>
+
+                <span class="arrow">
+                    →
+                </span>
+
+                </a>
+
 
 
 
                 <!-- Merge -->
 
-                <button
-                    type="button"
+                <a
+                    href="{{ url_for('merge.merge_page') }}"
                     class="action-card"
                 >
-
                     <div class="action-icon purple">
                         ⭃
                     </div>
 
-
                     <div class="action-text">
-
-                        <strong>
-                            Merge
-                        </strong>
+                        <strong>Merge</strong>
 
                         <span>
                             Combine your uploaded PDF documents into a single file
                         </span>
-
                     </div>
-
 
                     <span class="arrow">
                         →
                     </span>
-
-                </button>
-
+                </a>
 
 
                 <!-- Sort -->
 
-                <button
-                    type="button"
+                <a
+                    href="{{ url_for('sort.sort_page') }}"
                     class="action-card"
                 >
-
                     <div class="action-icon green">
                         ↕
                     </div>
 
-
                     <div class="action-text">
-
-                        <strong>
-                            Sort
-                        </strong>
+                        <strong>Sort</strong>
 
                         <span>
                             Reorder, delete unwanted, and orient your pages
                         </span>
-
                     </div>
-
 
                     <span class="arrow">
                         →
                     </span>
-
-                </button>
-
+                </a>
 
 
                 <!-- Split -->
 
-                <button
-                    type="button"
+                <a
+                    href="{{ url_for('split.split_page') }}"
                     class="action-card"
                 >
-
                     <div class="action-icon orange">
                         ⤛
                     </div>
 
-
                     <div class="action-text">
-
-                        <strong>
-                            Split
-                        </strong>
+                        <strong>Split</strong>
 
                         <span>
                             Separate pages into individual PDFs
                         </span>
-
                     </div>
-
 
                     <span class="arrow">
                         →
                     </span>
-
-                </button>
+                </a>
 
 
                 <!-- Reader -->
 
-                <button
-                    type="button"
+                <a
+                    href="{{ url_for('reader.reader_page') }}"
                     class="action-card"
                 >
-
                     <div class="action-icon teal">
                         🗣️
                     </div>
 
-
                     <div class="action-text">
-
-                        <strong>
-                            Reader
-                        </strong>
+                        <strong>Reader</strong>
 
                         <span>
-                            Have your PDF read aloud, converted to audio, or translated into another language
+                            Have your PDF read aloud, converted to audio,
+                            or translated into another language
                         </span>
-
                     </div>
-
 
                     <span class="arrow">
                         →
                     </span>
-
-                </button>
+                </a>
 
 
                 <!-- Converter -->
 
-                <button
-                    type="button"
+                <a
+                    href="{{ url_for('converter.converter_page') }}"
                     class="action-card"
                 >
-
                     <div class="action-icon teal">
                         ⇄
                     </div>
 
-
                     <div class="action-text">
-
-                        <strong>
-                            Converter
-                        </strong>
+                        <strong>Converter</strong>
 
                         <span>
-                            Convert your PDF to another file format, such as docx, txt, or html
+                            Convert your PDF to another file format,
+                            such as docx, txt, or html
                         </span>
-
                     </div>
-
 
                     <span class="arrow">
                         →
                     </span>
+                </a>
 
-                </button>
 
             </div>
 
@@ -444,7 +408,6 @@ Home - Text Editor
             </div>
 
         </div>
-
 
 
         <!-- =====================================

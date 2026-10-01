@@ -475,6 +475,10 @@
 
     text-align: left;
 
+    text-decoration: none;
+
+    box-sizing: border-box;
+
     cursor: pointer;
 
     box-shadow:
@@ -487,6 +491,7 @@
         box-shadow 0.2s ease;
 
 }
+
 
 
 .action-card:hover {
