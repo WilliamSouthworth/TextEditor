@@ -2,47 +2,472 @@
 
 
 {% block title %}
+
 Home - Text Editor
+
 {% endblock %}
+
+
+
+{% block head %}
+
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/home.css') }}"
+>
+
+{% endblock %}
+
 
 
 {% block content %}
 
-<section class="home-container">
-
-    <h1>
-        Text Editor
-    </h1>
-
-    <p>
-        Upload a PDF to begin.
-    </p>
+<div class="home-container">
 
 
-    <form id="upload-form">
+    <!-- =========================================
+         INITIAL UPLOAD SCREEN
+         ========================================= -->
 
-        <div class="upload-box">
+    <section id="upload-section">
 
-            <input
-                type="file"
-                id="pdf-file"
-                accept=".pdf,application/pdf"
-            >
 
-            <button type="submit">
-                Upload PDF
-            </button>
+        <div class="hero">
+
+            <div class="hero-badge">
+                PDF WORKSPACE
+            </div>
+
+
+            <h1>
+
+                Edit your documents
+
+                <span>
+                    with ease.
+                </span>
+
+            </h1>
+
+
+            <p>
+
+                Upload a PDF and choose what
+                you would like to do with it.
+
+            </p>
 
         </div>
 
-    </form>
 
 
-    <div id="status"></div>
+        <!-- Upload form -->
 
-</section>
+        <form id="upload-form">
+
+
+            <div class="upload-box">
+
+
+                <div class="upload-icon">
+                    ↑
+                </div>
+
+
+                <div class="upload-text">
+
+                    <h2>
+                        Upload your PDF(s)
+                    </h2>
+
+
+                    <p>
+                        Select multiple or a single PDF file from your computer<br>
+                        then click the "Upload PDF(s)" button to begin.
+                    </p>
+
+                </div>
+
+
+                <!-- File picker -->
+
+                <label
+                    for="pdf-file"
+                    class="file-label"
+                >
+
+                    Choose PDF(s)
+
+                </label>
+
+
+                <input
+                    type="file"
+                    id="pdf-file"
+                    accept=".pdf,application/pdf"
+                >
+
+
+                <!-- Upload button -->
+
+                <button
+                    type="submit"
+                    class="upload-button"
+                >
+
+                    Upload PDF(s)
+
+                </button>
+
+            </div>
+
+        </form>
+
+
+        <!-- Upload status -->
+
+        <div id="status"></div>
+
+
+    </section>
+
+
+
+    <!-- =========================================
+         PDF WORKSPACE
+         ========================================= -->
+
+    <section
+        id="workspace"
+        style="display: none;"
+    >
+
+
+        <!-- =====================================
+             LEFT SIDE
+             ===================================== -->
+
+        <div class="workspace-content">
+
+
+            <!-- Success message -->
+
+            <div class="success-message">
+
+
+                <div class="success-icon">
+                    ✓
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        File uploaded successfully
+                    </strong>
+
+
+                    <span id="workspace-status">
+
+                        Your PDF is ready to edit.
+
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- Workspace heading -->
+
+            <div class="workspace-heading">
+
+
+                <span class="section-label">
+                    PDF WORKSPACE
+                </span>
+
+
+                <h1>
+
+                    What would you like
+                    to do?
+
+                </h1>
+
+
+                <p>
+
+                    Choose an action below to get
+                    started with your document.
+
+                </p>
+
+
+            </div>
+
+
+
+            <!-- =================================
+                 ACTION CARDS
+                 ================================= -->
+
+            <div class="action-grid">
+
+
+                <!-- Edit -->
+
+                <button
+                    type="button"
+                    class="action-card"
+                >
+
+                    <div class="action-icon blue">
+                        ✎
+                    </div>
+
+
+                    <div class="action-text">
+
+                        <strong>
+                            Edit
+                        </strong>
+
+                        <span>
+                            Edit text, highlight, or enhance your PDF with various tools
+                        </span>
+
+                    </div>
+
+
+                    <span class="arrow">
+                        →
+                    </span>
+
+                </button>
+
+
+
+                <!-- Merge -->
+
+                <button
+                    type="button"
+                    class="action-card"
+                >
+
+                    <div class="action-icon purple">
+                        ⭃
+                    </div>
+
+
+                    <div class="action-text">
+
+                        <strong>
+                            Merge
+                        </strong>
+
+                        <span>
+                            Combine your uploaded PDF documents into a single file
+                        </span>
+
+                    </div>
+
+
+                    <span class="arrow">
+                        →
+                    </span>
+
+                </button>
+
+
+
+                <!-- Sort -->
+
+                <button
+                    type="button"
+                    class="action-card"
+                >
+
+                    <div class="action-icon green">
+                        ↕
+                    </div>
+
+
+                    <div class="action-text">
+
+                        <strong>
+                            Sort
+                        </strong>
+
+                        <span>
+                            Reorder, delete unwanted, and orient your pages
+                        </span>
+
+                    </div>
+
+
+                    <span class="arrow">
+                        →
+                    </span>
+
+                </button>
+
+
+
+                <!-- Split -->
+
+                <button
+                    type="button"
+                    class="action-card"
+                >
+
+                    <div class="action-icon orange">
+                        ⤛
+                    </div>
+
+
+                    <div class="action-text">
+
+                        <strong>
+                            Split
+                        </strong>
+
+                        <span>
+                            Separate pages into individual PDFs
+                        </span>
+
+                    </div>
+
+
+                    <span class="arrow">
+                        →
+                    </span>
+
+                </button>
+
+
+                <!-- Rotate -->
+
+                <button
+                    type="button"
+                    class="action-card"
+                >
+
+                    <div class="action-icon teal">
+                        🗣️
+                    </div>
+
+
+                    <div class="action-text">
+
+                        <strong>
+                            Reader
+                        </strong>
+
+                        <span>
+                            Have your PDF read aloud, converted to audio, or translated into another language
+                        </span>
+
+                    </div>
+
+
+                    <span class="arrow">
+                        →
+                    </span>
+
+                </button>
+
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =====================================
+             RIGHT SIDE - DOCUMENT
+             ===================================== -->
+
+        <aside class="document-panel">
+
+
+            <!-- Document header -->
+
+            <div class="document-panel-header">
+
+
+                <div>
+
+                    <span class="section-label">
+                        YOUR DOCUMENT
+                    </span>
+
+
+                    <h2 id="uploaded-file-name">
+                        PDF
+                    </h2>
+
+                </div>
+
+
+                <div class="pdf-badge">
+                    PDF
+                </div>
+
+
+            </div>
+
+
+
+            <!-- PDF viewer -->
+
+            <div class="pdf-preview">
+
+                <iframe
+                    id="pdf-viewer"
+                    title="PDF Preview"
+                ></iframe>
+
+            </div>
+
+
+
+            <!-- Document footer -->
+
+            <div class="document-footer">
+
+
+                <div class="document-status">
+
+                    <span class="status-dot"></span>
+
+                    <span>
+                        Ready
+                    </span>
+
+                </div>
+
+
+                <span class="document-type">
+                    PDF Document
+                </span>
+
+
+            </div>
+
+
+        </aside>
+
+
+    </section>
+
+
+</div>
 
 {% endblock %}
+
 
 
 {% block scripts %}

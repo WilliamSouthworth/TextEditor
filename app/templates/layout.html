@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
+
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.png') }}">
 
     <title>
         {% block title %}
@@ -13,53 +18,117 @@
         {% endblock %}
     </title>
 
+
+    <!-- Global CSS -->
+
     <link
         rel="stylesheet"
         href="{{ url_for('static', filename='css/style.css') }}"
     >
 
+
+    <!-- Page-specific head content -->
+
     {% block head %}
     {% endblock %}
+
 </head>
+
 
 <body>
 
-    <header>
-        <nav>
-            <a href="{{ url_for('main.index') }}">
-                Home
+
+    <!-- =========================================
+         HEADER
+         ========================================= -->
+
+    <header class="site-header">
+
+        <div class="nav-container">
+
+
+            <!-- Logo -->
+
+            <a
+                href="{{ url_for('main.index') }}"
+                class="brand"
+            >
+
+                <span class="brand-icon">
+                    T
+                </span>
+
+                <span class="brand-name">
+                    Text Editor
+                </span>
+
             </a>
 
-            <a href="#">
-                Editor
-            </a>
 
-            <a href="#">
-                Split
-            </a>
+            <!-- Right side -->
 
-            <a href="#">
-                Merge
-            </a>
-        </nav>
+            <div class="nav-right">
+
+                <span class="version">
+                    PDF Tools 0.1
+                </span>
+
+            </div>
+
+        </div>
+
     </header>
 
 
+
+    <!-- =========================================
+         MAIN CONTENT
+         ========================================= -->
+
     <main>
+
         {% block content %}
         {% endblock %}
+
     </main>
 
 
+
+    <!-- =========================================
+         FOOTER
+         ========================================= -->
+
     <footer>
-        <p>
-            &copy; 2026 Text Editor
-        </p>
+
+        <div class="footer-container">
+
+            <span>
+                © 2026 Text Editor
+            </span>
+
+            <span>
+                Simple PDF tools, all in one place.
+            </span>
+
+        </div>
+
     </footer>
 
+
+
+    <!-- Global JavaScript -->
+
+    <script
+        src="{{ url_for('static', filename='js/script.js') }}"
+    ></script>
+
+
+    <!-- Page-specific JavaScript -->
 
     {% block scripts %}
     {% endblock %}
 
+
 </body>
+
 </html>
