@@ -80,7 +80,6 @@ def upload_pdf():
         uploaded_file.filename
     )
 
-
     # ---------------------------------------------
     # Get upload directory
     # ---------------------------------------------

@@ -177,7 +177,6 @@ uploadForm.addEventListener(
                 );
             }
 
-
             /* ---------------------------------
                Display filename
                --------------------------------- */
@@ -186,14 +185,12 @@ uploadForm.addEventListener(
                 result.filename ||
                 file.name;
 
-
             /* ---------------------------------
                Display success message
                --------------------------------- */
 
             workspaceStatus.textContent =
                 "Your PDF is ready to edit.";
-
 
             /* ---------------------------------
                Load actual PDF
