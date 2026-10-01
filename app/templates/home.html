@@ -1,0 +1,503 @@
+<!-- 
+    Page Purpose: The home page of the site that users will land on
+        - Basically flow would be that a user inputs a pdf(s) then it appears on the right
+        side of the screen while the left side holds the ways the pdf can be edited
+
+    Supporting Files:
+        - Inheritance Layout: app\templates\layout.html
+        - CSS: app\static\css\home.css
+        - JS: app\static\js\home.js
+        - Python: 
+            - app\routes\main.py
+
+    Notes: 
+        - If there is only one pdf upload then the "Merge" card should be grayed out
+
+    Problems:
+        - We need to have a way for the pdf(s) to persist even after refresh, especially
+        when the user goes to another page from the card selections
+        - Right now everytime a user uploads a pdf it is saved to the application itself,
+        we need to either have it saved to the uesrs session instead or have the pdf
+        saved to the application but it is removed automatically wither after the cache is cleared
+        or after a certain amount of time (maybe one of the libraries have this?)
+        - I would like to remove the iFrame that the pdf goes into, it looks like shit plus
+        the tool bar attached to it is not removable since its not something we built
+    
+    Stuff to add:
+        - A way for users to upload multiple pdfs rather than just one then a way for users
+        to switch between the pdfs they uploaded 
+        - 
+-->
+
+
+{% extends "layout.html" %}
+
+
+{% block title %}
+
+Home - Text Editor
+
+{% endblock %}
+
+
+
+{% block head %}
+
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/home.css') }}"
+>
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="home-container">
+
+
+    <!-- =========================================
+         INITIAL UPLOAD SCREEN
+         ========================================= -->
+
+    <section id="upload-section">
+
+
+        <div class="hero">
+
+            <div class="hero-badge">
+                PDF WORKSPACE
+            </div>
+
+
+            <h1>
+
+                Edit your documents
+
+                <span>
+                    with ease.
+                </span>
+
+            </h1>
+
+
+            <p>
+
+                Upload a PDF and choose what
+                you would like to do with it.
+
+            </p>
+
+        </div>
+
+
+
+        <!-- Upload form -->
+
+        <form id="upload-form">
+
+
+            <div class="upload-box">
+
+
+                <div class="upload-icon">
+                    ↑
+                </div>
+
+
+                <div class="upload-text">
+
+                    <h2>
+                        Upload your PDF(s)
+                    </h2>
+
+
+                    <p>
+                        Select multiple or a single PDF file from your computer<br>
+                        then click the "Upload PDF(s)" button to begin.
+                    </p>
+
+                </div>
+
+
+                <!-- File picker -->
+
+                <label
+                    for="pdf-file"
+                    class="file-label"
+                >
+
+                    Choose PDF(s)
+
+                </label>
+
+
+                <input
+                    type="file"
+                    id="pdf-file"
+                    accept=".pdf,application/pdf"
+                >
+
+
+                <!-- Upload button -->
+
+                <button
+                    type="submit"
+                    class="upload-button"
+                >
+
+                    Upload PDF(s)
+
+                </button>
+
+            </div>
+
+        </form>
+
+
+        <!-- Upload status -->
+
+        <div id="status"></div>
+
+
+    </section>
+
+
+
+    <!-- =========================================
+         PDF WORKSPACE
+         ========================================= -->
+
+    <section
+        id="workspace"
+        style="display: none;"
+    >
+
+
+        <!-- =====================================
+             LEFT SIDE
+             ===================================== -->
+
+        <div class="workspace-content">
+
+
+            <!-- Success message -->
+
+            <div class="success-message">
+
+                <div class="success-icon">
+                    ✓
+                </div>
+
+                <div>
+
+                    <strong>
+                        File uploaded successfully
+                    </strong>
+
+
+                    <span id="workspace-status">
+
+                        Your PDF is ready to edit.
+
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- Workspace heading -->
+
+            <div class="workspace-heading">
+
+
+                <span class="section-label">
+                    PDF WORKSPACE
+                </span>
+
+
+                <h1>
+
+                    What would you like
+                    to do?
+
+                </h1>
+
+
+                <p>
+
+                    Choose an action below to get
+                    started with your document.
+
+                </p>
+
+
+            </div>
+
+
+
+            <!-- =================================
+                 ACTION CARDS
+                 ================================= -->
+
+            <div class="action-grid">
+
+
+                <!-- Edit -->
+
+                <a
+                href="{{ url_for('editor.edit') }}"
+                class="action-card"
+                >
+
+                <div class="action-icon blue">
+                    ✎
+                </div>
+
+                <div class="action-text">
+
+                    <strong>
+                        Edit
+                    </strong>
+
+                    <span>
+                        Edit text, highlight, or enhance your PDF with various tools
+                    </span>
+
+                </div>
+
+                <span class="arrow">
+                    →
+                </span>
+
+                </a>
+
+
+
+
+                <!-- Merge -->
+
+                <a
+                    href="{{ url_for('merge.merge_page') }}"
+                    class="action-card"
+                >
+                    <div class="action-icon purple">
+                        ⭃
+                    </div>
+
+                    <div class="action-text">
+                        <strong>Merge</strong>
+
+                        <span>
+                            Combine your uploaded PDF documents into a single file
+                        </span>
+                    </div>
+
+                    <span class="arrow">
+                        →
+                    </span>
+                </a>
+
+
+                <!-- Sort -->
+
+                <a
+                    href="{{ url_for('sort.sort_page') }}"
+                    class="action-card"
+                >
+                    <div class="action-icon green">
+                        ↕
+                    </div>
+
+                    <div class="action-text">
+                        <strong>Sort</strong>
+
+                        <span>
+                            Reorder, delete unwanted, and orient your pages
+                        </span>
+                    </div>
+
+                    <span class="arrow">
+                        →
+                    </span>
+                </a>
+
+
+                <!-- Split -->
+
+                <a
+                    href="{{ url_for('split.split_page') }}"
+                    class="action-card"
+                >
+                    <div class="action-icon orange">
+                        ⤛
+                    </div>
+
+                    <div class="action-text">
+                        <strong>Split</strong>
+
+                        <span>
+                            Separate pages into individual PDFs
+                        </span>
+                    </div>
+
+                    <span class="arrow">
+                        →
+                    </span>
+                </a>
+
+
+                <!-- Reader -->
+
+                <a
+                    href="{{ url_for('reader.reader_page') }}"
+                    class="action-card"
+                >
+                    <div class="action-icon teal">
+                        🗣️
+                    </div>
+
+                    <div class="action-text">
+                        <strong>Reader</strong>
+
+                        <span>
+                            Have your PDF read aloud, converted to audio,
+                            or translated into another language
+                        </span>
+                    </div>
+
+                    <span class="arrow">
+                        →
+                    </span>
+                </a>
+
+
+                <!-- Converter -->
+
+                <a
+                    href="{{ url_for('converter.converter_page') }}"
+                    class="action-card"
+                >
+                    <div class="action-icon teal">
+                        ⇄
+                    </div>
+
+                    <div class="action-text">
+                        <strong>Converter</strong>
+
+                        <span>
+                            Convert your PDF to another file format,
+                            such as docx, txt, or html
+                        </span>
+                    </div>
+
+                    <span class="arrow">
+                        →
+                    </span>
+                </a>
+
+
+            </div>
+
+            <div class="more-tools">
+                <p>More tools coming soon!</p>
+            </div>
+
+        </div>
+
+
+        <!-- =====================================
+             RIGHT SIDE - DOCUMENT
+             ===================================== -->
+
+        <aside class="document-panel">
+
+
+            <!-- Document header -->
+
+            <div class="document-panel-header">
+
+
+                <div>
+
+                    <span class="section-label">
+                        YOUR DOCUMENT
+                    </span>
+
+
+                    <h2 id="uploaded-file-name">
+                        PDF
+                    </h2>
+
+                </div>
+
+
+                <div class="pdf-badge">
+                    PDF
+                </div>
+
+
+            </div>
+
+
+
+            <!-- PDF viewer -->
+
+            <div class="pdf-preview">
+
+                <iframe
+                    id="pdf-viewer"
+                    title="PDF Preview"
+                ></iframe>
+
+            </div>
+
+
+
+            <!-- Document footer -->
+
+            <div class="document-footer">
+
+
+                <div class="document-status">
+
+                    <span class="status-dot"></span>
+
+                    <span>
+                        Ready
+                    </span>
+
+                </div>
+
+
+                <span class="document-type">
+                    PDF Document
+                </span>
+
+
+            </div>
+
+
+        </aside>
+
+
+    </section>
+
+
+</div>
+
+{% endblock %}
+
+
+
+{% block scripts %}
+
+<script
+    src="{{ url_for('static', filename='js/home.js') }}"
+></script>
+
+{% endblock %}

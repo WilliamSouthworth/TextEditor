@@ -1,0 +1,15 @@
+- When a user inputs a url link like website_name.com/editor trying to circumvent going
+to the main page we should have a way to disallowing them or forcing them to go to the home
+page instead, because if they don't have a pdf file uploaded then it might break the other
+functions or such (William 10/1/26)
+    Comments
+        - 
+
+- We should keep the general idea to a minimist type format, most PDF editors I have seen have
+buttons out the ass, I don't even know what most of them do and I doubt many people do. So
+keeping our product as simple as possible doing the things 90% of people actually do sounds like
+the play (William 10/1/26)
+    Comments
+        - 
+
+- 
