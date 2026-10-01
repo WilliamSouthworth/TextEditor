@@ -1,0 +1,6 @@
+- When a user inputs a url link like website_name.com/editor trying to circumvent going
+to the main page we should have a way to disallowing them or forcing them to go to the home
+page instead, because if they don't have a pdf file uploaded then it might break the other
+functions or such (William)
+
+- 
