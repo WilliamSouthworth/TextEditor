@@ -1,3 +1,25 @@
+<!-- 
+    Page Purpose: The home page of the site that users will land on
+        - Basically flow would be that a user inputs a pdf(s) then it appears on the right
+        side of the screen while the left side holds the ways the pdf can be edited
+
+    Supporting Files:
+        - Inheritance Layout: app\templates\layout.html
+        - CSS: app\static\css\home.css
+        - JS: app\static\js\home.js
+        - Python: app\routes\main.py
+
+    Notes: 
+        - If there is only one pdf upload then the "Merge" card should be grayed out
+
+    Problems:
+        - We need to change all the buttons from cards into <a> tages
+        that way it sends to another page, we have to update the routing for
+        it as well so the functionality remains the same
+        - 
+-->
+
+
 {% extends "layout.html" %}
 
 
@@ -348,7 +370,7 @@ Home - Text Editor
                 </button>
 
 
-                <!-- Rotate -->
+                <!-- Reader -->
 
                 <button
                     type="button"
@@ -380,6 +402,41 @@ Home - Text Editor
                 </button>
 
 
+                <!-- Converter -->
+
+                <button
+                    type="button"
+                    class="action-card"
+                >
+
+                    <div class="action-icon teal">
+                        ⇄
+                    </div>
+
+
+                    <div class="action-text">
+
+                        <strong>
+                            Converter
+                        </strong>
+
+                        <span>
+                            Convert your PDF to another file format, such as docx, txt, or html
+                        </span>
+
+                    </div>
+
+
+                    <span class="arrow">
+                        →
+                    </span>
+
+                </button>
+
+            </div>
+
+            <div class="more-tools">
+                <p>More tools coming soon!</p>
             </div>
 
         </div>

@@ -718,6 +718,19 @@
 
 }
 
+.more-tools {
+
+    padding:
+        1.25rem 1.5rem;
+
+    text-align: center;
+
+    color: #64748b;
+
+    font-size: 0.85rem;
+
+}
+
 
 /* =========================================
    PDF VIEWER
