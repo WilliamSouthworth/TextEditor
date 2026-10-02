@@ -1,960 +1,1596 @@
-/* =========================================
+/* =========================================================
    HOME
-   ========================================= */
+   ========================================================= */
 
 .home-container {
-
     width: 100%;
-
 }
 
 
-/* =========================================
-   UPLOAD SCREEN
-   ========================================= */
+/* =========================================================
+   INITIAL UPLOAD SCREEN
+   ========================================================= */
 
 #upload-section {
-
     max-width: 760px;
-
     margin: 0 auto;
-
     padding-top: 3rem;
-
     text-align: center;
-
 }
 
 
-/* =========================================
+/* =========================================================
    HERO
-   ========================================= */
+   ========================================================= */
 
 .hero-badge,
 .section-label {
-
     display: inline-block;
-
     color: #2563eb;
-
     font-size: 0.72rem;
-
     font-weight: 700;
-
     letter-spacing: 0.12em;
-
     text-transform: uppercase;
-
 }
-
 
 .hero h1 {
-
     margin-top: 1rem;
-
-    font-size:
-        clamp(
-            2.5rem,
-            5vw,
-            4rem
-        );
-
+    font-size: clamp(2.5rem, 5vw, 4rem);
     line-height: 1.05;
-
     letter-spacing: -0.055em;
-
     font-weight: 750;
-
 }
-
 
 .hero h1 span {
-
     color: #2563eb;
-
 }
-
 
 .hero p {
-
     max-width: 560px;
-
-    margin:
-        1.25rem auto 0;
-
+    margin: 1.25rem auto 0;
     color: #64748b;
-
     font-size: 1.05rem;
-
     line-height: 1.7;
-
 }
 
 
-/* =========================================
+/* =========================================================
    UPLOAD BOX
-   ========================================= */
+   ========================================================= */
 
 .upload-box {
-
     margin-top: 3rem;
-
     padding: 3rem;
-
     background: white;
-
-    border:
-        1px solid #e2e8f0;
-
+    border: 1px solid #e2e8f0;
     border-radius: 20px;
-
-    box-shadow:
-        0 20px 45px
-        rgba(15, 23, 42, 0.07);
-
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.07);
     display: flex;
-
     flex-direction: column;
-
     align-items: center;
-
 }
-
 
 .upload-icon {
-
     width: 64px;
-
     height: 64px;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     border-radius: 16px;
-
     background: #eff6ff;
-
     color: #2563eb;
-
     font-size: 2rem;
-
     font-weight: 300;
-
     margin-bottom: 1.25rem;
-
 }
-
 
 .upload-text h2 {
-
     font-size: 1.2rem;
-
     margin-bottom: 0.4rem;
-
 }
-
 
 .upload-text p {
-
     color: #94a3b8;
-
     font-size: 0.9rem;
-
 }
 
 
-/* =========================================
+/* =========================================================
    FILE INPUT
-   ========================================= */
+   ========================================================= */
 
 #pdf-file {
-
     position: absolute;
-
     width: 1px;
-
     height: 1px;
-
     opacity: 0;
-
     pointer-events: none;
-
 }
-
 
 .file-label {
-
     margin-top: 1.75rem;
-
-    padding:
-        0.7rem
-        1.2rem;
-
-    border:
-        1px solid #cbd5e1;
-
+    padding: 0.7rem 1.2rem;
+    border: 1px solid #cbd5e1;
     border-radius: 8px;
-
     background: white;
-
     color: #334155;
-
     font-size: 0.9rem;
-
     font-weight: 600;
-
     cursor: pointer;
-
     transition:
         border-color 0.2s ease,
-        background 0.2s ease;
-
+        background 0.2s ease,
+        color 0.2s ease;
 }
-
 
 .file-label:hover {
-
     border-color: #2563eb;
-
     background: #eff6ff;
-
     color: #2563eb;
-
 }
 
 
-/* =========================================
+/* =========================================================
+   SELECTED FILES
+   ========================================================= */
+
+.selected-files {
+    width: 100%;
+    max-width: 500px;
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+
+/*
+    Each selected file now has:
+
+    filename                      X
+*/
+
+.selected-file {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.55rem 0.65rem 0.55rem 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    color: #475569;
+    font-size: 0.8rem;
+    text-align: left;
+}
+
+.selected-file-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/*
+    Small X used to remove a file
+    from the upload queue.
+*/
+
+.selected-file-remove {
+    width: 24px;
+    height: 24px;
+    flex: 0 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: #94a3b8;
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    transition:
+        background 0.15s ease,
+        color 0.15s ease;
+}
+
+.selected-file-remove:hover {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+
+/* =========================================================
    UPLOAD BUTTON
-   ========================================= */
+   ========================================================= */
 
 .upload-button {
-
     margin-top: 0.75rem;
-
-    padding:
-        0.75rem
-        1.6rem;
-
+    padding: 0.75rem 1.6rem;
     border: none;
-
     border-radius: 8px;
-
     background: #2563eb;
-
     color: white;
-
     font-size: 0.9rem;
-
     font-weight: 600;
-
     cursor: pointer;
-
     transition:
         background 0.2s ease,
         transform 0.2s ease;
-
 }
-
 
 .upload-button:hover {
-
     background: #1d4ed8;
-
     transform: translateY(-1px);
-
 }
-
 
 .upload-button:disabled {
-
     background: #94a3b8;
-
     cursor: not-allowed;
-
     transform: none;
-
 }
 
 
-/* =========================================
+/* =========================================================
    STATUS
-   ========================================= */
+   ========================================================= */
 
 #status {
-
+    min-height: 1.5rem;
     margin-top: 1rem;
-
     color: #64748b;
-
     font-size: 0.9rem;
+}
 
+#status.error {
+    color: #dc2626;
 }
 
 
-/* =========================================
+/* =========================================================
+   STORED PDF SECTION
+   ========================================================= */
+
+.stored-pdfs-section {
+    margin-top: 30px;
+    padding: 20px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: #f8fafc;
+    text-align: left;
+}
+
+.stored-pdfs-section h3 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    color: #0f172a;
+}
+
+.stored-pdfs-description {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: #64748b;
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+.stored-pdf-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 12px 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.stored-pdf-item:last-child {
+    border-bottom: none;
+}
+
+.stored-pdf-name {
+    min-width: 0;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #334155;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.stored-pdf-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.stored-pdf-open,
+.stored-pdf-delete {
+    padding: 7px 12px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease;
+}
+
+.stored-pdf-open {
+    border: 1px solid #bfdbfe;
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.stored-pdf-open:hover {
+    border-color: #2563eb;
+    background: #dbeafe;
+}
+
+.stored-pdf-delete {
+    border: 1px solid #fecaca;
+    background: #fff;
+    color: #dc2626;
+}
+
+.stored-pdf-delete:hover {
+    background: #fee2e2;
+}
+
+
+/* =========================================================
    WORKSPACE
-   ========================================= */
+   ========================================================= */
 
 #workspace {
-
     width: 100%;
-
     display: grid;
-
     grid-template-columns:
         minmax(320px, 0.8fr)
         minmax(600px, 1.4fr);
-
     gap: 4rem;
-
     align-items: start;
-
 }
-
 
 .workspace-content {
-
     min-width: 0;
-
     padding-top: 0.5rem;
-
 }
 
 
-/* =========================================
+/* =========================================================
    SUCCESS MESSAGE
-   ========================================= */
+   ========================================================= */
 
 .success-message {
-
     display: flex;
-
     align-items: center;
-
     gap: 1rem;
-
-    padding:
-        1rem 1.25rem;
-
+    padding: 1rem 1.25rem;
     background: #f0fdf4;
-
-    border:
-        1px solid #bbf7d0;
-
+    border: 1px solid #bbf7d0;
     border-radius: 12px;
-
     color: #166534;
-
 }
-
 
 .success-icon {
-
     width: 38px;
-
     height: 38px;
-
     flex-shrink: 0;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     border-radius: 50%;
-
     background: #22c55e;
-
     color: white;
-
     font-weight: 700;
-
 }
-
 
 .success-message strong {
-
     display: block;
-
     margin-bottom: 0.2rem;
-
     font-size: 0.9rem;
-
 }
-
 
 .success-message span {
-
     display: block;
-
     color: #4d7c0f;
-
     font-size: 0.82rem;
-
 }
 
 
-/* =========================================
+/* =========================================================
    WORKSPACE HEADING
-   ========================================= */
+   ========================================================= */
 
 .workspace-heading {
-
     margin-top: 3rem;
-
     margin-bottom: 1.5rem;
-
 }
-
 
 .workspace-heading h1 {
-
     margin-top: 0.5rem;
-
     font-size: 2rem;
-
     letter-spacing: -0.035em;
-
 }
-
 
 .workspace-heading p {
-
     margin-top: 0.5rem;
-
     color: #64748b;
-
     font-size: 0.95rem;
-
 }
 
 
-/* =========================================
+/* =========================================================
    ACTION GRID
-   ========================================= */
+   ========================================================= */
 
 .action-grid {
-
     display: grid;
-
-    grid-template-columns:
-        repeat(
-            2,
-            minmax(0, 1fr)
-        );
-
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1rem;
-
 }
 
-
 .action-card {
-
     min-height: 115px;
-
     padding: 1.25rem;
-
     display: flex;
-
     align-items: center;
-
     gap: 1rem;
-
-    border:
-        1px solid #e2e8f0;
-
+    border: 1px solid #e2e8f0;
     border-radius: 14px;
-
     background: white;
-
     color: #0f172a;
-
     text-align: left;
-
     text-decoration: none;
-
     box-sizing: border-box;
-
     cursor: pointer;
-
-    box-shadow:
-        0 2px 5px
-        rgba(15, 23, 42, 0.03);
-
+    box-shadow: 0 2px 5px rgba(15, 23, 42, 0.03);
     transition:
         transform 0.2s ease,
         border-color 0.2s ease,
         box-shadow 0.2s ease;
-
 }
-
-
 
 .action-card:hover {
-
     transform: translateY(-3px);
-
     border-color: #bfdbfe;
-
-    box-shadow:
-        0 12px 25px
-        rgba(15, 23, 42, 0.08);
-
+    box-shadow: 0 12px 25px rgba(15, 23, 42, 0.08);
 }
-
 
 .action-icon {
-
     width: 46px;
-
     height: 46px;
-
     flex-shrink: 0;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     border-radius: 11px;
-
     font-size: 1.25rem;
-
     font-weight: 600;
-
 }
-
 
 .action-icon.blue {
-
     background: #eff6ff;
-
     color: #2563eb;
-
 }
-
 
 .action-icon.purple {
-
     background: #f5f3ff;
-
     color: #7c3aed;
-
 }
-
 
 .action-icon.green {
-
     background: #f0fdf4;
-
     color: #16a34a;
-
 }
-
 
 .action-icon.orange {
-
     background: #fff7ed;
-
     color: #ea580c;
-
 }
-
-
-.action-icon.red {
-
-    background: #fef2f2;
-
-    color: #dc2626;
-
-}
-
 
 .action-icon.teal {
-
     background: #f0fdfa;
-
     color: #0d9488;
-
 }
-
 
 .action-text {
-
     min-width: 0;
-
     display: flex;
-
     flex-direction: column;
-
     gap: 0.3rem;
-
 }
-
 
 .action-text strong {
-
     font-size: 0.95rem;
-
 }
-
 
 .action-text span {
-
     color: #64748b;
-
     font-size: 0.78rem;
-
     line-height: 1.4;
-
 }
 
-
 .arrow {
-
     margin-left: auto;
-
     color: #94a3b8;
-
     font-size: 1.1rem;
-
     transition:
         transform 0.2s ease,
         color 0.2s ease;
-
 }
-
 
 .action-card:hover .arrow {
-
-    transform:
-        translateX(3px);
-
+    transform: translateX(3px);
     color: #2563eb;
-
 }
 
 
-/* =========================================
-   DOCUMENT PANEL
-   ========================================= */
+/* =========================================================
+   DISABLED MERGE
+   ========================================================= */
 
-.document-panel {
-
-    position: sticky;
-
-    top: 100px;
-
-    background: white;
-
-    border:
-        1px solid #e2e8f0;
-
-    border-radius: 18px;
-
-    overflow: hidden;
-
-    box-shadow:
-        0 15px 40px
-        rgba(15, 23, 42, 0.08);
-
+.action-card.disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    pointer-events: none;
+    background: #f8fafc;
 }
 
 
-/* =========================================
-   DOCUMENT HEADER
-   ========================================= */
-
-.document-panel-header {
-
-    min-height: 82px;
-
-    padding:
-        1rem 1.25rem;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    border-bottom:
-        1px solid #e2e8f0;
-
-}
-
-
-.document-panel-header h2 {
-
-    margin-top: 0.35rem;
-
-    max-width: 330px;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-
-    white-space: nowrap;
-
-    font-size: 0.95rem;
-
-}
-
-
-.pdf-badge {
-
-    padding:
-        0.35rem 0.5rem;
-
-    border-radius: 5px;
-
-    background: #fef2f2;
-
-    color: #dc2626;
-
-    font-size: 0.65rem;
-
-    font-weight: 800;
-
-}
+/* =========================================================
+   MORE TOOLS
+   ========================================================= */
 
 .more-tools {
-
-    padding:
-        1.25rem 1.5rem;
-
+    padding: 1.25rem 1.5rem;
     text-align: center;
-
     color: #64748b;
-
     font-size: 0.85rem;
-
 }
 
 
-/* =========================================
-   PDF VIEWER
-   ========================================= */
+/* =========================================================
+   DOCUMENT PANEL
+   ========================================================= */
+
+.document-panel {
+    position: sticky;
+    top: 100px;
+    min-width: 0;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(15, 23, 42, 0.08);
+}
+
+
+/* =========================================================
+   DOCUMENT HEADER
+   ========================================================= */
+
+.document-panel-header {
+    min-height: 82px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.document-panel-header > div:first-child {
+    min-width: 0;
+}
+
+.document-panel-header h2 {
+    margin-top: 0.35rem;
+    max-width: 330px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.95rem;
+}
+
+.pdf-count {
+    flex-shrink: 0;
+    color: #64748b;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+#pdf-count {
+    color: #2563eb;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   DOCUMENT LIST WRAPPER
+   ========================================================= */
+
+.document-list-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+
+/* =========================================================
+   DOCUMENT LIST
+   ========================================================= */
+
+.document-list {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+}
+
+.document-list::-webkit-scrollbar {
+    height: 6px;
+}
+
+.document-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.document-list::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+.document-list::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+
+/* =========================================================
+   DOCUMENT ITEM
+   ========================================================= */
+
+.document-item {
+    flex: 0 0 auto;
+    max-width: 240px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background: #f8fafc;
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.document-item:hover {
+    border-color: #cbd5e1;
+}
+
+.document-item.active {
+    border-color: #2563eb;
+    background: #eff6ff;
+    box-shadow:
+        0 0 0 1px
+        rgba(37, 99, 235, 0.08);
+}
+
+
+/* =========================================================
+   DOCUMENT ITEM BUTTON
+   ========================================================= */
+
+.document-item-button {
+    min-width: 0;
+    max-width: 205px;
+    padding: 0.55rem 0.7rem;
+    border: none;
+    background: transparent;
+    color: #334155;
+    cursor: pointer;
+    text-align: left;
+}
+
+.document-item-name {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.document-item.active .document-item-name {
+    color: #2563eb;
+}
+
+
+/* =========================================================
+   DELETE X BUTTON
+   ========================================================= */
+
+.document-delete-button {
+    width: 30px;
+    height: 30px;
+    flex: 0 0 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 3px;
+    padding: 0;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: #94a3b8;
+    font-size: 1.15rem;
+    font-weight: 400;
+    line-height: 1;
+    cursor: pointer;
+    transition:
+        background 0.15s ease,
+        color 0.15s ease;
+}
+
+.document-delete-button:hover {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.document-delete-button:active {
+    background: #fecaca;
+    color: #b91c1c;
+}
+
+
+/* =========================================================
+   ADD PDF BUTTON
+   ========================================================= */
+
+.workspace-upload-button {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: white;
+    color: #2563eb;
+    font-size: 1.35rem;
+    font-weight: 500;
+    line-height: 1;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.workspace-upload-button:hover {
+    background: #eff6ff;
+    border-color: #2563eb;
+    color: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   PDF PREVIEW
+   ========================================================= */
 
 .pdf-preview {
-
+    position: relative;
     width: 100%;
-
-    height: calc(100vh - 180px);
-    min-height: 700px;
-
+    height: calc(100vh - 290px);
+    min-height: 650px;
     background: #e2e8f0;
-
     padding: 1rem;
-
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
-
-.pdf-preview iframe {
-
+.pdf-pages {
     width: 100%;
-
     height: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    overflow: auto;
+}
 
+.pdf-page-canvas {
     display: block;
-
-    border: none;
-
-    border-radius: 8px;
-
+    max-width: 100%;
+    height: auto;
     background: white;
-
     box-shadow:
         0 5px 15px
-        rgba(15, 23, 42, 0.1);
-
+        rgba(15, 23, 42, 0.12);
 }
 
 
-/* =========================================
+/* =========================================================
+   PDF LOADING
+   ========================================================= */
+
+.pdf-loading {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+    font-size: 0.9rem;
+    background: rgba(226, 232, 240, 0.92);
+}
+
+
+/* =========================================================
+   PDF ERROR
+   ========================================================= */
+
+.pdf-error {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #dc2626;
+    font-size: 0.9rem;
+    background: #fef2f2;
+}
+
+
+/* =========================================================
+   PDF CONTROLS
+   ========================================================= */
+
+.pdf-controls {
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    border-top: 1px solid #e2e8f0;
+    background: white;
+}
+
+.pdf-control {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    background: white;
+    color: #334155;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.pdf-control:hover:not(:disabled) {
+    background: #eff6ff;
+    border-color: #2563eb;
+    color: #2563eb;
+}
+
+.pdf-control:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.page-info {
+    color: #64748b;
+    font-size: 0.78rem;
+}
+
+.page-info strong {
+    color: #334155;
+}
+
+
+/* =========================================================
    DOCUMENT FOOTER
-   ========================================= */
+   ========================================================= */
 
 .document-footer {
-
-    padding:
-        0.9rem 1.25rem;
-
+    padding: 0.9rem 1.25rem;
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
-
-    border-top:
-        1px solid #e2e8f0;
-
+    border-top: 1px solid #e2e8f0;
 }
-
 
 .document-status {
-
     display: flex;
-
     align-items: center;
-
     gap: 0.5rem;
-
     color: #475569;
-
     font-size: 0.78rem;
-
     font-weight: 600;
-
 }
-
 
 .status-dot {
-
     width: 7px;
-
     height: 7px;
-
     border-radius: 50%;
-
     background: #22c55e;
-
     box-shadow:
         0 0 0 3px #dcfce7;
-
 }
-
 
 .document-type {
-
     color: #94a3b8;
-
     font-size: 0.75rem;
-
 }
 
 
-/* =========================================
+/* =========================================================
    TABLET
-   ========================================= */
+   ========================================================= */
 
 @media (max-width: 1000px) {
 
     #workspace {
-
         grid-template-columns: 1fr;
-
         gap: 2.5rem;
-
     }
-
 
     .document-panel {
-
         position: static;
-
-        max-width: 650px;
-
+        max-width: 700px;
         width: 100%;
-
         margin: 0 auto;
-
         order: -1;
-
     }
-
 
     .pdf-preview {
-
         height: 600px;
-
+        min-height: 600px;
     }
-
 }
 
 
-/* =========================================
+/* =========================================================
    MOBILE
-   ========================================= */
+   ========================================================= */
 
 @media (max-width: 700px) {
 
     #upload-section {
-
         padding-top: 1rem;
-
     }
-
 
     .hero h1 {
-
         font-size: 2.5rem;
-
     }
-
 
     .upload-box {
-
-        padding:
-            2rem 1.25rem;
-
+        padding: 2rem 1.25rem;
     }
-
 
     .action-grid {
-
         grid-template-columns: 1fr;
-
     }
-
 
     .workspace-heading h1 {
-
         font-size: 1.7rem;
-
     }
-
 
     .pdf-preview {
-
         height: 500px;
-
+        min-height: 500px;
     }
 
+    .document-panel-header h2 {
+        max-width: 230px;
+    }
+
+    .stored-pdf-item {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .stored-pdf-actions {
+        width: 100%;
+    }
+
+    .stored-pdf-open,
+    .stored-pdf-delete {
+        flex: 1;
+    }
 }
 
 
-/* =========================================
+/* =========================================================
    SMALL MOBILE
-   ========================================= */
+   ========================================================= */
 
 @media (max-width: 450px) {
 
     .success-message {
-
         align-items: flex-start;
-
     }
 
-
-    .document-panel-header h2 {
-
-        max-width: 230px;
-
+    .document-list-wrapper {
+        padding: 0.6rem;
     }
 
+    .document-item {
+        max-width: 210px;
+    }
+
+    .document-item-button {
+        max-width: 175px;
+    }
 
     .pdf-preview {
-
         height: 450px;
-
+        min-height: 450px;
         padding: 0.5rem;
+    }
+}
 
+/* ==========================================================================
+   STORED PDF SECTION
+   ========================================================================== */
+
+.stored-pdfs-section {
+    margin-top: 32px;
+    padding: 24px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background: #fff;
+}
+
+.stored-pdfs-header {
+    margin-bottom: 20px;
+}
+
+.stored-pdfs-header h2 {
+    margin: 0 0 6px;
+}
+
+.stored-pdfs-header p {
+    margin: 0;
+    color: #666;
+}
+
+
+/* ==========================================================================
+   STORED PDF TOOLBAR
+   ========================================================================== */
+
+.stored-pdf-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+    padding: 14px;
+    border-radius: 8px;
+    background: #f5f5f5;
+}
+
+.select-all-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.select-all-wrapper input {
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
+}
+
+.stored-pdf-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+
+/* ==========================================================================
+   STORED PDF BUTTONS
+   ========================================================================== */
+
+.stored-action-button,
+.stored-pdf-open,
+.stored-pdf-delete {
+    border: 0;
+    border-radius: 6px;
+    padding: 9px 13px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition:
+        opacity 0.15s ease,
+        background-color 0.15s ease;
+}
+
+.stored-action-button {
+    background: #2563eb;
+    color: #fff;
+}
+
+.stored-action-button:hover {
+    opacity: 0.9;
+}
+
+.stored-action-button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.open-all-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.danger-button,
+.stored-pdf-delete {
+    background: #dc2626;
+    color: #fff;
+}
+
+.danger-button:hover,
+.stored-pdf-delete:hover {
+    opacity: 0.9;
+}
+
+
+/* ==========================================================================
+   STORED PDF LIST
+   ========================================================================== */
+
+.stored-pdfs-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.stored-pdf-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 13px 14px;
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.stored-pdf-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.stored-pdf-checkbox {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.stored-pdf-checkbox input {
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
+}
+
+.stored-pdf-info {
+    min-width: 0;
+}
+
+.stored-pdf-info strong {
+    display: block;
+    overflow-wrap: anywhere;
+}
+
+.stored-pdf-row-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.stored-pdf-open {
+    background: #2563eb;
+    color: #fff;
+}
+
+
+/* ==========================================================================
+   NO STORED FILES
+   ========================================================================== */
+
+.no-stored-pdfs {
+    padding: 24px;
+    text-align: center;
+    color: #666;
+}
+
+
+/* ==========================================================================
+   SELECTED UPLOAD FILES
+   ========================================================================== */
+
+#selected-files {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 12px;
+}
+
+.selected-file-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #f7f7f7;
+}
+
+.selected-file-name {
+    overflow-wrap: anywhere;
+    min-width: 0;
+}
+
+.selected-file-remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    flex: 0 0 24px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: #dc2626;
+    color: #fff;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.selected-file-remove:hover {
+    opacity: 0.85;
+}
+
+
+/* ==========================================================================
+   MOBILE
+   ========================================================================== */
+
+@media (max-width: 768px) {
+
+    .stored-pdf-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .stored-pdf-actions {
+        flex-direction: column;
+    }
+
+    .stored-action-button {
+        width: 100%;
+        text-align: center;
+    }
+
+    .stored-pdf-row {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .stored-pdf-row-actions {
+        width: 100%;
+    }
+
+    .stored-pdf-row-actions button {
+        flex: 1;
+    }
+}
+
+/* =========================================================
+   STORED PDF BULK SELECTION
+   ========================================================= */
+
+.stored-pdfs-section {
+    margin-top: 32px;
+    padding: 24px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: #fff;
+    text-align: left;
+}
+
+.stored-pdfs-header {
+    margin-bottom: 20px;
+}
+
+.stored-pdfs-header h2 {
+    margin: 0 0 6px;
+    color: #0f172a;
+    font-size: 1.25rem;
+}
+
+.stored-pdfs-header p {
+    margin: 0;
+    color: #64748b;
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   TOOLBAR
+   ========================================================= */
+
+.stored-pdf-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+    padding: 14px;
+    border-radius: 8px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+}
+
+.select-all-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #334155;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.select-all-wrapper input {
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   BULK ACTION BUTTONS
+   ========================================================= */
+
+.stored-pdf-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.stored-action-button {
+    padding: 9px 14px;
+    border: 1px solid #bfdbfe;
+    border-radius: 7px;
+    background: #2563eb;
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        background 0.15s ease,
+        opacity 0.15s ease,
+        transform 0.15s ease;
+}
+
+.stored-action-button:hover:not(:disabled) {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+.stored-action-button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.stored-action-button.danger-button {
+    border-color: #dc2626;
+    background: #dc2626;
+}
+
+.stored-action-button.danger-button:hover:not(:disabled) {
+    background: #b91c1c;
+}
+
+
+/* =========================================================
+   STORED PDF LIST
+   ========================================================= */
+
+.stored-pdfs-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.stored-pdf-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 13px 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background: #fff;
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease;
+}
+
+.stored-pdf-row:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+}
+
+.stored-pdf-row.selected {
+    background: #eff6ff;
+    border-color: #93c5fd;
+}
+
+
+/* =========================================================
+   LEFT SIDE
+   ========================================================= */
+
+.stored-pdf-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    flex: 1;
+}
+
+.stored-pdf-checkbox {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.stored-pdf-checkbox input {
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
+}
+
+.stored-pdf-info {
+    min-width: 0;
+}
+
+.stored-pdf-info strong {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #334155;
+    font-size: 0.85rem;
+}
+
+
+/* =========================================================
+   INDIVIDUAL ACTIONS
+   ========================================================= */
+
+.stored-pdf-row-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.stored-pdf-open-single,
+.stored-pdf-delete-single {
+    padding: 7px 12px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease;
+}
+
+.stored-pdf-open-single {
+    border: 1px solid #bfdbfe;
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.stored-pdf-open-single:hover {
+    border-color: #2563eb;
+    background: #dbeafe;
+}
+
+.stored-pdf-delete-single {
+    border: 1px solid #fecaca;
+    background: #fff;
+    color: #dc2626;
+}
+
+.stored-pdf-delete-single:hover {
+    background: #fee2e2;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    .stored-pdf-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .stored-pdf-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .stored-action-button {
+        width: 100%;
+    }
+
+    .stored-pdf-row {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .stored-pdf-row-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .stored-pdf-open-single,
+    .stored-pdf-delete-single {
+        width: 100%;
     }
 
 }

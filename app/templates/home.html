@@ -1,45 +1,20 @@
-<!-- 
-    Page Purpose: The home page of the site that users will land on
-        - Basically flow would be that a user inputs a pdf(s) then it appears on the right
-        side of the screen while the left side holds the ways the pdf can be edited
+<!--
+    Page Purpose: The home page of the site that users will land on.
+    Users can upload PDFs, return to an existing session workspace,
+    or delete pre-existing stored PDFs.
 
     Supporting Files:
         - Inheritance Layout: app\templates\layout.html
         - CSS: app\static\css\home.css
         - JS: app\static\js\home.js
-        - Python: 
-            - app\routes\main.py
-
-    Notes: 
-        - If there is only one pdf upload then the "Merge" card should be grayed out
-
-    Problems:
-        - We need to have a way for the pdf(s) to persist even after refresh, especially
-        when the user goes to another page from the card selections
-        - Right now everytime a user uploads a pdf it is saved to the application itself,
-        we need to either have it saved to the uesrs session instead or have the pdf
-        saved to the application but it is removed automatically wither after the cache is cleared
-        or after a certain amount of time (maybe one of the libraries have this?)
-        - I would like to remove the iFrame that the pdf goes into, it looks like shit plus
-        the tool bar attached to it is not removable since its not something we built
-    
-    Stuff to add:
-        - A way for users to upload multiple pdfs rather than just one then a way for users
-        to switch between the pdfs they uploaded 
-        - 
+        - Python: app\routes\main.py
 -->
-
 
 {% extends "layout.html" %}
 
-
 {% block title %}
-
-Home - Text Editor
-
+Home - PDF Workspace
 {% endblock %}
-
-
 
 {% block head %}
 
@@ -50,19 +25,20 @@ Home - Text Editor
 
 {% endblock %}
 
-
-
 {% block content %}
 
 <div class="home-container">
 
-
-    <!-- =========================================
+    <!-- =================================================
          INITIAL UPLOAD SCREEN
-         ========================================= -->
+         ================================================= -->
 
-    <section id="upload-section">
-
+    <section
+        id="upload-section"
+        {% if pdfs %}
+        style="display: none;"
+        {% endif %}
+    >
 
         <div class="hero">
 
@@ -70,41 +46,30 @@ Home - Text Editor
                 PDF WORKSPACE
             </div>
 
-
             <h1>
-
                 Edit your documents
-
-                <span>
-                    with ease.
-                </span>
-
+                <span>with ease.</span>
             </h1>
 
-
             <p>
-
-                Upload a PDF and choose what
-                you would like to do with it.
-
+                Upload one or more PDFs and choose
+                what you would like to do with them.
             </p>
 
         </div>
 
 
-
-        <!-- Upload form -->
+        <!-- =================================================
+             NEW PDF UPLOAD
+             ================================================= -->
 
         <form id="upload-form">
 
-
             <div class="upload-box">
-
 
                 <div class="upload-icon">
                     ↑
                 </div>
-
 
                 <div class="upload-text">
 
@@ -112,43 +77,37 @@ Home - Text Editor
                         Upload your PDF(s)
                     </h2>
 
-
                     <p>
-                        Select multiple or a single PDF file from your computer<br>
-                        then click the "Upload PDF(s)" button to begin.
+                        Select multiple or a single PDF
+                        file from your computer.
                     </p>
 
                 </div>
-
-
-                <!-- File picker -->
 
                 <label
                     for="pdf-file"
                     class="file-label"
                 >
-
                     Choose PDF(s)
-
                 </label>
-
 
                 <input
                     type="file"
                     id="pdf-file"
                     accept=".pdf,application/pdf"
+                    multiple
                 >
 
-
-                <!-- Upload button -->
+                <div
+                    id="selected-files"
+                    class="selected-files"
+                ></div>
 
                 <button
                     type="submit"
                     class="upload-button"
                 >
-
                     Upload PDF(s)
-
                 </button>
 
             </div>
@@ -156,33 +115,213 @@ Home - Text Editor
         </form>
 
 
-        <!-- Upload status -->
-
         <div id="status"></div>
 
+
+        <!-- =================================================
+             EXISTING SESSION PDFs
+             ================================================= -->
+
+        {% if pdfs %}
+
+        <div
+            id="existing-session-section"
+            style="
+                margin-top: 30px;
+                padding: 24px;
+                border: 1px solid #ddd;
+                border-radius: 10px;
+                background: #f8f9fa;
+                text-align: center;
+            "
+        >
+
+            <h2 style="margin-top: 0;">
+                PDFs Already in Your Workspace
+            </h2>
+
+            <p style="color: #666;">
+                You already have PDF files in your current
+                session workspace.
+            </p>
+
+            <a
+                href="#workspace"
+                id="go-to-workspace-button"
+                class="upload-button"
+                style="
+                    display: inline-block;
+                    text-decoration: none;
+                    margin-top: 10px;
+                "
+            >
+                Go to PDF Workspace
+            </a>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- =================================================
+            PRE-EXISTING STORED PDFs
+            ================================================= -->
+
+        {% if available_pdfs %}
+
+        <div
+            id="stored-pdfs-section"
+            class="stored-pdfs-section"
+        >
+
+            <div class="stored-pdfs-header">
+
+                <h2>
+                    PDFs Already Stored
+                </h2>
+
+                <p>
+                    Select one or more PDFs to open in your
+                    workspace, or delete them from the server.
+                </p>
+
+            </div>
+
+
+            <!-- =================================================
+                STORED PDF TOOLBAR
+                ================================================= -->
+
+            <div class="stored-pdf-toolbar">
+
+                <label class="select-all-wrapper">
+
+                    <input
+                        type="checkbox"
+                        id="stored-select-all"
+                    >
+
+                    <span>
+                        Select All
+                    </span>
+
+                </label>
+
+
+                <div class="stored-pdf-actions">
+
+                    <button
+                        type="button"
+                        id="open-selected-stored"
+                        class="stored-action-button"
+                        disabled
+                    >
+                        Open Selected
+                    </button>
+
+                    <button
+                        type="button"
+                        id="delete-selected-stored"
+                        class="stored-action-button danger-button"
+                        disabled
+                    >
+                        Delete Selected
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                STORED PDF LIST
+                ================================================= -->
+
+            <div
+                id="stored-pdfs-list"
+                class="stored-pdfs-list"
+            >
+
+                {% for pdf in available_pdfs %}
+
+                <div
+                    class="stored-pdf-row"
+                    data-filename="{{ pdf.filename }}"
+                >
+
+                    <div class="stored-pdf-left">
+
+                        <label class="stored-pdf-checkbox">
+
+                            <input
+                                type="checkbox"
+                                class="stored-pdf-select"
+                                value="{{ pdf.filename }}"
+                            >
+
+                        </label>
+
+
+                        <div class="stored-pdf-info">
+
+                            <strong>
+                                {{ pdf.display_name }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="stored-pdf-row-actions">
+
+                        <button
+                            type="button"
+                            class="stored-pdf-open-single"
+                            data-filename="{{ pdf.filename }}"
+                        >
+                            Open
+                        </button>
+
+                        <button
+                            type="button"
+                            class="stored-pdf-delete-single"
+                            data-filename="{{ pdf.filename }}"
+                        >
+                            Delete
+                        </button>
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+        {% endif %}
 
     </section>
 
 
-
-    <!-- =========================================
-         PDF WORKSPACE
-         ========================================= -->
+    <!-- =================================================
+         WORKSPACE
+         ================================================= -->
 
     <section
         id="workspace"
+        {% if not pdfs %}
         style="display: none;"
+        {% endif %}
     >
 
-
-        <!-- =====================================
+        <!-- =================================================
              LEFT SIDE
-             ===================================== -->
+             ================================================= -->
 
         <div class="workspace-content">
-
-
-            <!-- Success message -->
 
             <div class="success-message">
 
@@ -193,241 +332,255 @@ Home - Text Editor
                 <div>
 
                     <strong>
-                        File uploaded successfully
+                        Workspace ready
                     </strong>
 
-
                     <span id="workspace-status">
-
-                        Your PDF is ready to edit.
-
+                        Your PDFs are ready to edit.
                     </span>
 
                 </div>
 
-
             </div>
 
 
-
-            <!-- Workspace heading -->
-
             <div class="workspace-heading">
-
 
                 <span class="section-label">
                     PDF WORKSPACE
                 </span>
 
-
                 <h1>
-
-                    What would you like
-                    to do?
-
+                    What would you like to do?
                 </h1>
 
-
                 <p>
-
                     Choose an action below to get
-                    started with your document.
-
+                    started with your documents.
                 </p>
-
 
             </div>
 
 
-
-            <!-- =================================
+            <!-- =================================================
                  ACTION CARDS
-                 ================================= -->
+                 ================================================= -->
 
             <div class="action-grid">
 
-
-                <!-- Edit -->
+                <!-- EDIT -->
 
                 <a
-                href="{{ url_for('editor.edit') }}"
-                class="action-card"
+                    href="{{ url_for('editor.edit') }}"
+                    class="action-card"
                 >
 
-                <div class="action-icon blue">
-                    ✎
-                </div>
+                    <div class="action-icon blue">
+                        ✎
+                    </div>
 
-                <div class="action-text">
+                    <div class="action-text">
 
-                    <strong>
-                        Edit
-                    </strong>
+                        <strong>
+                            Edit
+                        </strong>
 
-                    <span>
-                        Edit text, highlight, or enhance your PDF with various tools
+                        <span>
+                            Edit text, highlight, or enhance
+                            your PDF with various tools.
+                        </span>
+
+                    </div>
+
+                    <span class="arrow">
+                        →
                     </span>
-
-                </div>
-
-                <span class="arrow">
-                    →
-                </span>
 
                 </a>
 
 
-
-
-                <!-- Merge -->
+                <!-- MERGE -->
 
                 <a
                     href="{{ url_for('merge.merge_page') }}"
-                    class="action-card"
+                    class="action-card merge-card"
+                    id="merge-card"
                 >
+
                     <div class="action-icon purple">
                         ⭃
                     </div>
 
                     <div class="action-text">
-                        <strong>Merge</strong>
+
+                        <strong>
+                            Merge
+                        </strong>
 
                         <span>
-                            Combine your uploaded PDF documents into a single file
+                            Combine your uploaded PDF
+                            documents into a single file.
                         </span>
+
                     </div>
 
                     <span class="arrow">
                         →
                     </span>
+
                 </a>
 
 
-                <!-- Sort -->
+                <!-- SORT -->
 
                 <a
                     href="{{ url_for('sort.sort_page') }}"
                     class="action-card"
                 >
+
                     <div class="action-icon green">
                         ↕
                     </div>
 
                     <div class="action-text">
-                        <strong>Sort</strong>
+
+                        <strong>
+                            Sort
+                        </strong>
 
                         <span>
-                            Reorder, delete unwanted, and orient your pages
+                            Reorder, delete unwanted,
+                            and orient your pages.
                         </span>
+
                     </div>
 
                     <span class="arrow">
                         →
                     </span>
+
                 </a>
 
 
-                <!-- Split -->
+                <!-- SPLIT -->
 
                 <a
                     href="{{ url_for('split.split_page') }}"
                     class="action-card"
                 >
+
                     <div class="action-icon orange">
                         ⤛
                     </div>
 
                     <div class="action-text">
-                        <strong>Split</strong>
+
+                        <strong>
+                            Split
+                        </strong>
 
                         <span>
-                            Separate pages into individual PDFs
+                            Separate pages into
+                            individual PDFs.
                         </span>
+
                     </div>
 
                     <span class="arrow">
                         →
                     </span>
+
                 </a>
 
 
-                <!-- Reader -->
+                <!-- READER -->
 
                 <a
                     href="{{ url_for('reader.reader_page') }}"
                     class="action-card"
                 >
+
                     <div class="action-icon teal">
                         🗣️
                     </div>
 
                     <div class="action-text">
-                        <strong>Reader</strong>
+
+                        <strong>
+                            Reader
+                        </strong>
 
                         <span>
-                            Have your PDF read aloud, converted to audio,
-                            or translated into another language
+                            Have your PDF read aloud,
+                            converted to audio, or translated.
                         </span>
+
                     </div>
 
                     <span class="arrow">
                         →
                     </span>
+
                 </a>
 
 
-                <!-- Converter -->
+                <!-- CONVERTER -->
 
                 <a
                     href="{{ url_for('converter.converter_page') }}"
                     class="action-card"
                 >
+
                     <div class="action-icon teal">
                         ⇄
                     </div>
 
                     <div class="action-text">
-                        <strong>Converter</strong>
+
+                        <strong>
+                            Converter
+                        </strong>
 
                         <span>
-                            Convert your PDF to another file format,
-                            such as docx, txt, or html
+                            Convert your PDF to another
+                            file format.
                         </span>
+
                     </div>
 
                     <span class="arrow">
                         →
                     </span>
-                </a>
 
+                </a>
 
             </div>
 
+
             <div class="more-tools">
-                <p>More tools coming soon!</p>
+
+                <p>
+                    More tools coming soon!
+                </p>
+
             </div>
 
         </div>
 
 
-        <!-- =====================================
-             RIGHT SIDE - DOCUMENT
-             ===================================== -->
+        <!-- =================================================
+             RIGHT SIDE - DOCUMENT PANEL
+             ================================================= -->
 
         <aside class="document-panel">
 
-
-            <!-- Document header -->
-
             <div class="document-panel-header">
-
 
                 <div>
 
                     <span class="section-label">
-                        YOUR DOCUMENT
+                        YOUR DOCUMENTS
                     </span>
-
 
                     <h2 id="uploaded-file-name">
                         PDF
@@ -435,33 +588,152 @@ Home - Text Editor
 
                 </div>
 
+                <div class="pdf-count">
 
-                <div class="pdf-badge">
-                    PDF
+                    <span id="pdf-count">
+                        {{ pdfs|length }}
+                    </span>
+
+                    PDF(s)
+
+                </div>
+
+            </div>
+
+
+            <!-- DOCUMENT LIST -->
+
+            <div class="document-list-wrapper">
+
+                <div
+                    id="document-list"
+                    class="document-list"
+                >
+
+                    {% for pdf in pdfs %}
+
+                    <div
+                        class="document-item {% if loop.first %}active{% endif %}"
+                        data-index="{{ loop.index0 }}"
+                    >
+
+                        <button
+                            type="button"
+                            class="document-item-button"
+                            title="{{ pdf.display_name or pdf.filename }}"
+                        >
+
+                            <span class="document-item-name">
+                                {{ pdf.display_name or pdf.filename }}
+                            </span>
+
+                        </button>
+
+                        <button
+                            type="button"
+                            class="document-delete-button"
+                            title="Remove {{ pdf.display_name or pdf.filename }}"
+                            aria-label="Remove {{ pdf.display_name or pdf.filename }}"
+                        >
+                            ×
+                        </button>
+
+                    </div>
+
+                    {% endfor %}
+
                 </div>
 
 
+                <label
+                    for="workspace-pdf-input"
+                    class="workspace-upload-button"
+                    title="Upload more PDFs"
+                    aria-label="Upload more PDFs"
+                >
+                    +
+                </label>
+
+                <input
+                    type="file"
+                    id="workspace-pdf-input"
+                    accept=".pdf,application/pdf"
+                    multiple
+                    hidden
+                >
+
             </div>
 
 
-
-            <!-- PDF viewer -->
+            <!-- PDF VIEWER -->
 
             <div class="pdf-preview">
 
-                <iframe
-                    id="pdf-viewer"
-                    title="PDF Preview"
-                ></iframe>
+                <div
+                    id="pdf-loading"
+                    class="pdf-loading"
+                >
+                    Loading PDF...
+                </div>
+
+                <div
+                    id="pdf-error"
+                    class="pdf-error"
+                    style="display: none;"
+                >
+                    Unable to display this PDF.
+                </div>
+
+                <div
+                    id="pdf-pages"
+                    class="pdf-pages"
+                ></div>
 
             </div>
 
 
+            <!-- PDF CONTROLS -->
 
-            <!-- Document footer -->
+            <div class="pdf-controls">
+
+                <button
+                    type="button"
+                    id="previous-page"
+                    class="pdf-control"
+                >
+                    ←
+                </button>
+
+                <span class="page-info">
+
+                    Page
+
+                    <strong id="current-page">
+                        1
+                    </strong>
+
+                    of
+
+                    <strong id="total-pages">
+                        1
+                    </strong>
+
+                </span>
+
+                <button
+                    type="button"
+                    id="next-page"
+                    class="pdf-control"
+                >
+                    →
+                </button>
+
+            </div>
+
+
+            <!-- DOCUMENT FOOTER -->
 
             <div class="document-footer">
-
 
                 <div class="document-status">
 
@@ -473,31 +745,52 @@ Home - Text Editor
 
                 </div>
 
-
                 <span class="document-type">
                     PDF Document
                 </span>
 
-
             </div>
-
 
         </aside>
 
-
     </section>
-
 
 </div>
 
 {% endblock %}
 
 
-
 {% block scripts %}
+
+<script>
+
+    window.initialPdfs =
+        {{ pdfs | tojson }};
+
+</script>
+
+
+<script type="module">
+
+    import * as pdfjsLib from
+        "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.min.mjs";
+
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+        "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs";
+
+    window.pdfjsLib =
+        pdfjsLib;
+
+    window.dispatchEvent(
+        new Event("pdfjs-ready")
+    );
+
+</script>
+
 
 <script
     src="{{ url_for('static', filename='js/home.js') }}"
+    defer
 ></script>
 
 {% endblock %}
