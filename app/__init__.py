@@ -1,9 +1,13 @@
 from pathlib import Path
+import os
 
 from flask import Flask
+from dotenv import load_dotenv
 
 
 def create_app():
+    
+    load_dotenv()
 
     app = Flask(__name__)
 
@@ -30,6 +34,8 @@ def create_app():
     # -------------------------------------------------
     # Flask configuration
     # -------------------------------------------------
+    
+    app.config["SECRET_KEY"] = os.environ["SECRET_KEY"]
 
     app.config["UPLOAD_FOLDER"] = upload_folder
 
