@@ -1,6 +1,9 @@
 <!-- 
-    Page Purpose: N/A
-        - N/A
+    Page Purpose:
+        - Displays the PDF editor workspace for the currently uploaded PDF
+        - Allows the user to access editing tools such as selecting,
+          highlighting, adding text, and removing content
+        - Displays the active PDF that was passed from the Flask editor route
 
     Supporting Files:
         - Inheritance Layout: app\templates\layout.html
@@ -10,13 +13,23 @@
             - app\routes\editor.py
 
     Notes: 
-        - N/A
+        - The active PDF filename and file URL are provided by editor.py
+        - The PDF is temporarily displayed using an iframe
+        - The iframe will later be replaced with PDF.js so that the application
+          can support text selection, highlighting, and other editing features
 
     Problems:
-        - N/A
+        - Editing tools are not functional yet
+        - The browser iframe PDF viewer does not provide enough control for
+          custom editing features
 
     Stuff to add:
-        - N/A
+        - PDF.js rendering
+        - Selectable text layer
+        - Highlighting
+        - Add text functionality
+        - Remove annotations or edits
+        - Save/export edited PDF
 -->
 
 {% extends "layout.html" %}
@@ -26,18 +39,128 @@ PDF Editor
 {% endblock %}
 
 
+{% block head %}
+
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/editor.css') }}"
+>
+
+{% endblock %}
+
+
 {% block content %}
 
-<div style="text-align: center; padding: 5rem 1rem;">
+<div class="editor-container">
 
-    <h1>
-        PDF Editor
-    </h1>
 
-    <p style="color: #64748b; margin-top: 1rem;">
-        Coming soon.
-    </p>
+    <!-- =========================================
+         EDITOR HEADER
+         ========================================= -->
+
+    <div class="editor-header">
+
+
+        <div>
+
+            <span class="section-label">
+                PDF EDITOR
+            </span>
+
+
+            <h1>
+                {{ filename }}
+            </h1>
+
+
+            <p>
+                Select and modify content in your PDF.
+            </p>
+
+        </div>
+
+
+        <a
+            href="{{ url_for('main.index') }}"
+            class="back-button"
+        >
+            Back
+        </a>
+
+
+    </div>
+
+
+    <!-- =========================================
+         EDITOR WORKSPACE
+         ========================================= -->
+
+    <div class="editor-workspace">
+
+
+        <!-- =====================================
+             LEFT SIDE - EDITING TOOLS
+             ===================================== -->
+
+        <aside class="editor-tools">
+
+
+            <h2>
+                Tools
+            </h2>
+
+
+            <button type="button">
+                Select
+            </button>
+
+
+            <button type="button">
+                Highlight
+            </button>
+
+
+            <button type="button">
+                Add Text
+            </button>
+
+
+            <button type="button">
+                Remove
+            </button>
+
+
+        </aside>
+
+
+        <!-- =====================================
+             RIGHT SIDE - PDF DOCUMENT
+             ===================================== -->
+
+        <section class="editor-document">
+
+
+            <iframe
+                src="{{ file_url }}"
+                title="PDF Editor Preview"
+            ></iframe>
+
+
+        </section>
+
+
+    </div>
+
 
 </div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script
+    src="{{ url_for('static', filename='js/editor.js') }}"
+></script>
 
 {% endblock %}

@@ -1,3 +1,4 @@
+from fileinput import filename
 from pathlib import Path
 
 from flask import (
@@ -7,6 +8,7 @@ from flask import (
     render_template,
     request,
     send_from_directory,
+    session,
     url_for,
 )
 
@@ -107,6 +109,12 @@ def upload_pdf():
     uploaded_file.save(
         file_path
     )
+    
+    # ---------------------------------------------
+    # Remember current PDF
+    # ---------------------------------------------
+
+    session["current_pdf"] = filename
 
 
     # ---------------------------------------------

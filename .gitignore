@@ -8,5 +8,4 @@ uploads/*
 output/*
 !output/.gitkeep
 
-.env
 .vscode/
