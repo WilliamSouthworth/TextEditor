@@ -257,7 +257,7 @@
 
     min-height: 700px;
 
-    padding: 1rem;
+    padding: 1.5rem;
 
     background: #e2e8f0;
 
@@ -266,7 +266,7 @@
 
     border-radius: 18px;
 
-    overflow: hidden;
+    overflow: auto;
 
     box-shadow:
         0 15px 40px
@@ -274,28 +274,91 @@
 
 }
 
-
 /* =========================================
-   PDF VIEWER
+   PDF.JS VIEWER
    ========================================= */
 
-.editor-document iframe {
+.pdf-pages {
 
     width: 100%;
 
-    height: 100%;
+    display: flex;
 
-    display: block;
+    flex-direction: column;
 
-    border: none;
+    align-items: center;
 
-    border-radius: 8px;
+    gap: 1.5rem;
+
+}
+
+
+.pdf-page {
+
+    position: relative;
+
+    flex-shrink: 0;
 
     background: white;
 
     box-shadow:
         0 5px 15px
-        rgba(15, 23, 42, 0.1);
+        rgba(15, 23, 42, 0.15);
+
+}
+
+
+.pdf-canvas {
+
+    display: block;
+
+}
+
+
+/* =========================================
+   TEXT LAYER
+   ========================================= */
+
+.textLayer {
+
+    z-index: 2;
+
+}
+
+
+.textLayer span {
+
+    cursor: text;
+
+}
+
+
+.textLayer ::selection {
+
+    background:
+        rgba(
+            37,
+            99,
+            235,
+            0.3
+        );
+
+}
+
+
+/* =========================================
+   PDF LOADING
+   ========================================= */
+
+.pdf-loading {
+
+    padding: 3rem;
+
+    color: #64748b;
+
+    text-align: center;
+
+    font-size: 0.9rem;
 
 }
 

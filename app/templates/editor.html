@@ -12,21 +12,17 @@
         - Python: 
             - app\routes\editor.py
 
-    Notes: 
+    Notes:
         - The active PDF filename and file URL are provided by editor.py
-        - The PDF is temporarily displayed using an iframe
-        - The iframe will later be replaced with PDF.js so that the application
-          can support text selection, highlighting, and other editing features
+        - PDF.js is used to render the PDF directly inside the editor
+        - A selectable text layer is rendered over each PDF page
 
     Problems:
         - Editing tools are not functional yet
-        - The browser iframe PDF viewer does not provide enough control for
-          custom editing features
+        - Selected text cannot yet be permanently highlighted or modified
 
     Stuff to add:
-        - PDF.js rendering
-        - Selectable text layer
-        - Highlighting
+        - Highlight selected text
         - Add text functionality
         - Remove annotations or edits
         - Save/export edited PDF
@@ -40,6 +36,11 @@ PDF Editor
 
 
 {% block head %}
+
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/6.4.299/pdf_viewer.css"
+>
 
 <link
     rel="stylesheet"
@@ -137,14 +138,24 @@ PDF Editor
              RIGHT SIDE - PDF DOCUMENT
              ===================================== -->
 
-        <section class="editor-document">
+        <section
+            class="editor-document"
+            id="pdf-viewer"
+            data-pdf-url="{{ file_url }}"
+        >
+
+            <div
+                id="pdf-loading"
+                class="pdf-loading"
+            >
+                Loading PDF...
+            </div>
 
 
-            <iframe
-                src="{{ file_url }}"
-                title="PDF Editor Preview"
-            ></iframe>
-
+            <div
+                id="pdf-pages"
+                class="pdf-pages"
+            ></div>
 
         </section>
 
@@ -160,6 +171,7 @@ PDF Editor
 {% block scripts %}
 
 <script
+    type="module"
     src="{{ url_for('static', filename='js/editor.js') }}"
 ></script>
 
