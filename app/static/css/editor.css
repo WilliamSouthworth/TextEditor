@@ -1,0 +1,397 @@
+/* =========================================
+   EDITOR
+   ========================================= */
+
+.editor-container {
+
+    width: 100%;
+
+}
+
+
+/* =========================================
+   EDITOR HEADER
+   ========================================= */
+
+.editor-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 2rem;
+
+    margin-bottom: 2rem;
+
+}
+
+
+.section-label {
+
+    display: inline-block;
+
+    color: #2563eb;
+
+    font-size: 0.72rem;
+
+    font-weight: 700;
+
+    letter-spacing: 0.12em;
+
+    text-transform: uppercase;
+
+}
+
+
+.editor-header h1 {
+
+    margin-top: 0.5rem;
+
+    max-width: 700px;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+    font-size: 2rem;
+
+    letter-spacing: -0.035em;
+
+}
+
+
+.editor-header p {
+
+    margin-top: 0.5rem;
+
+    color: #64748b;
+
+    font-size: 0.95rem;
+
+}
+
+
+/* =========================================
+   BACK BUTTON
+   ========================================= */
+
+.back-button {
+
+    flex-shrink: 0;
+
+    padding:
+        0.7rem
+        1.2rem;
+
+    border:
+        1px solid #cbd5e1;
+
+    border-radius: 8px;
+
+    background: white;
+
+    color: #334155;
+
+    font-size: 0.9rem;
+
+    font-weight: 600;
+
+    text-decoration: none;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        color 0.2s ease;
+
+}
+
+
+.back-button:hover {
+
+    border-color: #2563eb;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+}
+
+
+/* =========================================
+   EDITOR WORKSPACE
+   ========================================= */
+
+.editor-workspace {
+
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        260px
+        minmax(0, 1fr);
+
+    gap: 2rem;
+
+    align-items: start;
+
+}
+
+
+/* =========================================
+   EDITING TOOLS
+   ========================================= */
+
+.editor-tools {
+
+    position: sticky;
+
+    top: 100px;
+
+    padding: 1.25rem;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 0.75rem;
+
+    background: white;
+
+    border:
+        1px solid #e2e8f0;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 8px 25px
+        rgba(15, 23, 42, 0.06);
+
+}
+
+
+.editor-tools h2 {
+
+    margin-bottom: 0.5rem;
+
+    font-size: 1rem;
+
+    color: #0f172a;
+
+}
+
+
+/* =========================================
+   TOOL BUTTONS
+   ========================================= */
+
+.editor-tools button {
+
+    width: 100%;
+
+    min-height: 48px;
+
+    padding:
+        0.75rem
+        1rem;
+
+    border:
+        1px solid #e2e8f0;
+
+    border-radius: 9px;
+
+    background: white;
+
+    color: #334155;
+
+    font-size: 0.9rem;
+
+    font-weight: 600;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+
+}
+
+
+.editor-tools button:hover {
+
+    border-color: #bfdbfe;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    transform: translateY(-1px);
+
+}
+
+
+.editor-tools button:active {
+
+    transform: translateY(0);
+
+}
+
+
+/* =========================================
+   PDF DOCUMENT
+   ========================================= */
+
+.editor-document {
+
+    width: 100%;
+
+    height: calc(100vh - 190px);
+
+    min-height: 700px;
+
+    padding: 1rem;
+
+    background: #e2e8f0;
+
+    border:
+        1px solid #e2e8f0;
+
+    border-radius: 18px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 15px 40px
+        rgba(15, 23, 42, 0.08);
+
+}
+
+
+/* =========================================
+   PDF VIEWER
+   ========================================= */
+
+.editor-document iframe {
+
+    width: 100%;
+
+    height: 100%;
+
+    display: block;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: white;
+
+    box-shadow:
+        0 5px 15px
+        rgba(15, 23, 42, 0.1);
+
+}
+
+
+/* =========================================
+   TABLET
+   ========================================= */
+
+@media (max-width: 1000px) {
+
+    .editor-workspace {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .editor-tools {
+
+        position: static;
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
+
+    }
+
+
+    .editor-tools h2 {
+
+        grid-column: 1 / -1;
+
+    }
+
+
+    .editor-document {
+
+        height: 650px;
+
+        min-height: 650px;
+
+    }
+
+}
+
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@media (max-width: 700px) {
+
+    .editor-header {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+    }
+
+
+    .editor-header h1 {
+
+        max-width: 100%;
+
+        font-size: 1.7rem;
+
+    }
+
+
+    .editor-tools {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .editor-tools h2 {
+
+        grid-column: auto;
+
+    }
+
+
+    .editor-document {
+
+        height: 550px;
+
+        min-height: 550px;
+
+        padding: 0.5rem;
+
+    }
+
+}
