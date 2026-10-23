@@ -1,31 +1,23 @@
-<!-- 
+
+<!--
     Page Purpose:
-        - Displays the PDF editor workspace for the currently uploaded PDF
-        - Allows the user to access editing tools such as selecting,
-          highlighting, adding text, and removing content
-        - Displays the active PDF that was passed from the Flask editor route
+        - Displays the PDF editor workspace
+        - Supports multiple uploaded PDFs
+        - Allows switching between uploaded PDFs
+        - Displays the selected PDF using PDF.js
 
     Supporting Files:
-        - Inheritance Layout: app\templates\layout.html
-        - CSS: app\static\css\editor.css
-        - JS: app\static\js\editor.js
-        - Python: 
-            - app\routes\editor.py
+        - Inheritance Layout: app/templates/layout.html
+        - CSS: app/static/css/editor.css
+        - JS: app/static/js/editor.js
+        - Python:
+            - app/routes/editor.py
+            - app/routes/main.py
 
     Notes:
-        - The active PDF filename and file URL are provided by editor.py
-        - PDF.js is used to render the PDF directly inside the editor
-        - A selectable text layer is rendered over each PDF page
-
-    Problems:
-        - Editing tools are not functional yet
-        - Selected text cannot yet be permanently highlighted or modified
-
-    Stuff to add:
-        - Highlight selected text
-        - Add text functionality
-        - Remove annotations or edits
-        - Save/export edited PDF
+        - Flask provides the uploaded PDF collection
+        - The current document ID identifies the selected PDF
+        - PDF.js renders the selected document
 -->
 
 {% extends "layout.html" %}
@@ -52,8 +44,11 @@ PDF Editor
 
 {% block content %}
 
-<div class="editor-container">
-
+<div
+    class="editor-container"
+    id="editor-container"
+    data-current-document-id="{{ current_document_id }}"
+>
 
     <!-- =========================================
          EDITOR HEADER
@@ -61,18 +56,15 @@ PDF Editor
 
     <div class="editor-header">
 
-
         <div>
 
             <span class="section-label">
                 PDF EDITOR
             </span>
 
-
-            <h1>
+            <h1 id="editor-filename">
                 {{ filename }}
             </h1>
-
 
             <p>
                 Select and modify content in your PDF.
@@ -80,14 +72,12 @@ PDF Editor
 
         </div>
 
-
         <a
             href="{{ url_for('main.index') }}"
             class="back-button"
         >
             Back
         </a>
-
 
     </div>
 
@@ -105,31 +95,45 @@ PDF Editor
 
         <aside class="editor-tools">
 
-
             <h2>
                 Tools
             </h2>
 
-
-            <button type="button">
+            <button
+                type="button"
+                id="select-tool"
+                class="editor-tool active"
+                data-tool="select"
+            >
                 Select
             </button>
 
-
-            <button type="button">
+            <button
+                type="button"
+                id="highlight-tool"
+                class="editor-tool"
+                data-tool="highlight"
+            >
                 Highlight
             </button>
 
-
-            <button type="button">
+            <button
+                type="button"
+                id="add-text-tool"
+                class="editor-tool"
+                data-tool="text"
+            >
                 Add Text
             </button>
 
-
-            <button type="button">
+            <button
+                type="button"
+                id="remove-tool"
+                class="editor-tool"
+                data-tool="remove"
+            >
                 Remove
             </button>
-
 
         </aside>
 
@@ -141,8 +145,46 @@ PDF Editor
         <section
             class="editor-document"
             id="pdf-viewer"
-            data-pdf-url="{{ file_url }}"
         >
+
+            <!-- =================================
+                 DOCUMENT SELECTOR
+                 ================================= -->
+
+            <div class="editor-document-selector">
+
+                <label for="editor-document-select">
+                    Document
+                </label>
+
+                <select
+                    id="editor-document-select"
+                >
+
+                    {% for document in documents %}
+
+                    <option
+                        value="{{ document.id }}"
+                        data-file-url="{{ document.file_url }}"
+                        {% if document.id == current_document_id %}
+                        selected
+                        {% endif %}
+                    >
+
+                        {{ document.filename }}
+
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- =================================
+                 PDF LOADING MESSAGE
+                 ================================= -->
 
             <div
                 id="pdf-loading"
@@ -151,6 +193,23 @@ PDF Editor
                 Loading PDF...
             </div>
 
+
+            <!-- =================================
+                 PDF ERROR MESSAGE
+                 ================================= -->
+
+            <div
+                id="pdf-error"
+                class="pdf-error"
+                hidden
+            >
+                Unable to load PDF.
+            </div>
+
+
+            <!-- =================================
+                 PDF PAGE CONTAINER
+                 ================================= -->
 
             <div
                 id="pdf-pages"
@@ -161,7 +220,6 @@ PDF Editor
 
 
     </div>
-
 
 </div>
 
