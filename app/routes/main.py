@@ -313,26 +313,18 @@ def set_current_document():
 # DELETE A PDF
 # =========================================
 
+
+# =========================================
+# DELETE A PDF
+# =========================================
+
 @main.route("/documents/<document_id>", methods=["DELETE"])
 def delete_document(document_id):
-    """
-    Delete a PDF associated with the current session.
 
-    If the deleted PDF was selected:
-        - Select another PDF if one remains.
-        - Clear the current PDF if none remain.
-
-    The browser can return to the original upload screen
-    when the returned files list is empty.
-    """
-
-    # -------------------------------------
-    # Get the session documents
-    # -------------------------------------
-
+    # Get the PDFs associated with this session.
     documents = list(get_documents())
 
-    # Find the requested document in this session.
+    # Find the requested PDF.
     selected_document = next(
         (
             document
@@ -342,40 +334,52 @@ def delete_document(document_id):
         None,
     )
 
-    # Reject IDs that do not belong to this session.
+    # Reject PDFs that do not belong to this session.
     if selected_document is None:
         return jsonify({
             "error": "Document not found."
         }), 404
 
-    # -------------------------------------
-    # Get the upload directory
-    # -------------------------------------
-
+    # Get the upload directory.
     upload_folder = Path(
         current_app.config["UPLOAD_FOLDER"]
     ).resolve()
 
-    # Resolve the stored filename inside the upload folder.
+    # Get the stored PDF's path.
     file_path = (
         upload_folder / selected_document["stored_name"]
     ).resolve()
 
-    # Ensure the file cannot point outside the upload folder.
+    # Prevent deleting files outside the upload directory.
     if file_path.parent != upload_folder:
         return jsonify({
             "error": "Invalid document path."
         }), 400
 
     # -------------------------------------
-    # Delete the PDF from disk
+    # PERMANENTLY DELETE THE PDF FROM DISK
     # -------------------------------------
 
-    if file_path.exists():
-        file_path.unlink()
+    try:
+
+        # Delete the actual PDF file.
+        # missing_ok=False ensures a missing file
+        # is reported instead of silently ignored.
+        file_path.unlink(missing_ok=False)
+
+    except OSError as error:
+
+        current_app.logger.exception(
+            "Could not delete uploaded PDF: %s",
+            file_path
+        )
+
+        return jsonify({
+            "error": f"Could not delete PDF: {error}"
+        }), 500
 
     # -------------------------------------
-    # Remove the PDF from the session
+    # REMOVE THE PDF FROM THE SESSION
     # -------------------------------------
 
     documents = [
@@ -387,17 +391,16 @@ def delete_document(document_id):
     session["pdf_documents"] = documents
 
     # -------------------------------------
-    # Update the current PDF selection
+    # UPDATE THE CURRENT PDF
     # -------------------------------------
 
     current_id = session.get("current_pdf_id")
 
-    # If the deleted PDF was selected, select another.
     if current_id == document_id:
 
         if documents:
 
-            # Select the most recently remaining PDF.
+            # Select the last remaining PDF.
             selected_document = documents[-1]
 
             session["current_pdf_id"] = (
@@ -419,11 +422,11 @@ def delete_document(document_id):
             current_id = None
 
     # -------------------------------------
-    # Return the updated document list
+    # RETURN THE UPDATED DOCUMENT LIST
     # -------------------------------------
 
     return jsonify({
-        "message": "PDF deleted successfully.",
+        "message": "PDF permanently deleted.",
         "files": public_documents(documents),
         "current_id": current_id,
     })

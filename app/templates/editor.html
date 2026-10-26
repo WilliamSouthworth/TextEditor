@@ -20,217 +20,133 @@
         - PDF.js renders the selected document
 -->
 
+
 {% extends "layout.html" %}
 
-{% block title %}
-PDF Editor
-{% endblock %}
-
+{% block title %}PDF Editor{% endblock %}
 
 {% block head %}
-
-<link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/6.4.299/pdf_viewer.css"
->
-
-<link
-    rel="stylesheet"
-    href="{{ url_for('static', filename='css/editor.css') }}"
->
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/editor.css') }}">
 {% endblock %}
-
 
 {% block content %}
-
-<div
-    class="editor-container"
-    id="editor-container"
-    data-current-document-id="{{ current_document_id }}"
->
-
-    <!-- =========================================
-         EDITOR HEADER
-         ========================================= -->
-
-    <div class="editor-header">
-
+<div class="editor-container" data-current-document-id="{{ current_document_id }}">
+    <header class="editor-header">
         <div>
-
-            <span class="section-label">
-                PDF EDITOR
-            </span>
-
-            <h1 id="editor-filename">
-                {{ filename }}
-            </h1>
-
-            <p>
-                Select and modify content in your PDF.
-            </p>
-
+            <span class="section-label">PDF WORKSPACE</span>
+            <h1>PDF Editor</h1>
+            <p>Select a document, then use the toolbar to annotate it.</p>
         </div>
 
-        <a
-            href="{{ url_for('main.index') }}"
-            class="back-button"
-        >
-            Back
+        <a class="back-button" href="{{ url_for('main.index') }}">
+            Back to Documents
         </a>
+    </header>
 
-    </div>
+    <main class="editor-workspace">
+        <section class="editor-document" aria-label="PDF editor">
 
+            <div class="editor-toolbar" role="toolbar" aria-label="PDF editing tools">
 
-    <!-- =========================================
-         EDITOR WORKSPACE
-         ========================================= -->
+                <div class="editor-document-selector">
+                    <label for="editor-document-select">Document</label>
 
-    <div class="editor-workspace">
+                    <select id="editor-document-select" aria-label="Select PDF document">
+                        {% for document in documents %}
+                        <option
+                            value="{{ document.id }}"
+                            data-file-url="{{ document.file_url }}"
+                            {% if document.id|string == current_document_id|string %}selected{% endif %}
+                        >{{ document.filename }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
+                <div class="editor-tool-buttons">
 
-        <!-- =====================================
-             LEFT SIDE - EDITING TOOLS
-             ===================================== -->
-
-        <aside class="editor-tools">
-
-            <h2>
-                Tools
-            </h2>
-
-            <button
-                type="button"
-                id="select-tool"
-                class="editor-tool active"
-                data-tool="select"
-            >
-                Select
-            </button>
-
-            <button
-                type="button"
-                id="highlight-tool"
-                class="editor-tool"
-                data-tool="highlight"
-            >
-                Highlight
-            </button>
-
-            <button
-                type="button"
-                id="add-text-tool"
-                class="editor-tool"
-                data-tool="text"
-            >
-                Add Text
-            </button>
-
-            <button
-                type="button"
-                id="remove-tool"
-                class="editor-tool"
-                data-tool="remove"
-            >
-                Remove
-            </button>
-
-        </aside>
-
-
-        <!-- =====================================
-             RIGHT SIDE - PDF DOCUMENT
-             ===================================== -->
-
-        <section
-            class="editor-document"
-            id="pdf-viewer"
-        >
-
-            <!-- =================================
-                 DOCUMENT SELECTOR
-                 ================================= -->
-
-            <div class="editor-document-selector">
-
-                <label for="editor-document-select">
-                    Document
-                </label>
-
-                <select
-                    id="editor-document-select"
-                >
-
-                    {% for document in documents %}
-
-                    <option
-                        value="{{ document.id }}"
-                        data-file-url="{{ document.file_url }}"
-                        {% if document.id == current_document_id %}
-                        selected
-                        {% endif %}
+                    <button
+                        type="button"
+                        id="highlight-tool"
+                        class="tool-button"
+                        title="Highlight the currently selected PDF text"
                     >
+                        Highlight
+                    </button>
 
-                        {{ document.filename }}
+                    <button
+                        type="button"
+                        id="edit-tool"
+                        class="tool-button"
+                        data-tool="edit"
+                        aria-pressed="false"
+                        title="Click the document to add text or click existing added text to edit it"
+                    >
+                        Edit
+                    </button>
 
-                    </option>
+                    <button
+                        type="button"
+                        id="undo-tool"
+                        class="tool-button"
+                        title="Undo the last editor change"
+                        disabled
+                    >
+                        Undo
+                    </button>
 
-                    {% endfor %}
+                    <button
+                        type="button"
+                        id="redo-tool"
+                        class="tool-button"
+                        title="Redo the last undone change"
+                        disabled
+                    >
+                        Redo
+                    </button>
 
-                </select>
+                    <button
+                        type="button"
+                        id="save-pdf-tool"
+                        class="tool-button tool-button-primary"
+                        title="Download an edited copy of the PDF"
+                    >
+                        Save PDF
+                    </button>
 
+                </div>
             </div>
 
-
-            <!-- =================================
-                 PDF LOADING MESSAGE
-                 ================================= -->
-
             <div
-                id="pdf-loading"
-                class="pdf-loading"
+                id="editor-status"
+                class="editor-status"
+                role="status"
+                aria-live="polite"
             >
-                Loading PDF...
+                Select text and click Highlight, or click Edit and then click the page to type.
             </div>
 
+            <div id="pdf-viewer" class="pdf-viewer">
 
-            <!-- =================================
-                 PDF ERROR MESSAGE
-                 ================================= -->
+                <div
+                    id="pdf-loading"
+                    class="pdf-loading"
+                    role="status"
+                    aria-live="polite"
+                >
+                    Loading PDF...
+                </div>
 
-            <div
-                id="pdf-error"
-                class="pdf-error"
-                hidden
-            >
-                Unable to load PDF.
+                <div id="pdf-error" class="pdf-error" role="alert" hidden></div>
+
+                <div id="pdf-pages" class="pdf-pages"></div>
+
             </div>
-
-
-            <!-- =================================
-                 PDF PAGE CONTAINER
-                 ================================= -->
-
-            <div
-                id="pdf-pages"
-                class="pdf-pages"
-            ></div>
-
         </section>
-
-
-    </div>
-
+    </main>
 </div>
 
-{% endblock %}
-
-
-{% block scripts %}
-
-<script
-    type="module"
-    src="{{ url_for('static', filename='js/editor.js') }}"
-></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script src="{{ url_for('static', filename='js/editor.js') }}"></script>
 {% endblock %}

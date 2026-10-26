@@ -1,460 +1,593 @@
 /* =========================================
-   EDITOR
+   EDITOR PAGE
    ========================================= */
 
 .editor-container {
-
     width: 100%;
-
+    min-width: 0;
 }
-
-
-/* =========================================
-   EDITOR HEADER
-   ========================================= */
 
 .editor-header {
-
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
-
     gap: 2rem;
-
-    margin-bottom: 2rem;
-
+    margin-bottom: 1.5rem;
 }
-
 
 .section-label {
-
     display: inline-block;
-
     color: #2563eb;
-
     font-size: 0.72rem;
-
     font-weight: 700;
-
     letter-spacing: 0.12em;
-
     text-transform: uppercase;
-
 }
-
 
 .editor-header h1 {
-
-    margin-top: 0.5rem;
-
+    margin: 0.5rem 0 0;
     max-width: 700px;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-
-    white-space: nowrap;
-
     font-size: 2rem;
-
     letter-spacing: -0.035em;
-
 }
-
 
 .editor-header p {
-
-    margin-top: 0.5rem;
-
+    margin: 0.5rem 0 0;
     color: #64748b;
-
     font-size: 0.95rem;
-
 }
 
-
-/* =========================================
-   BACK BUTTON
-   ========================================= */
-
 .back-button {
-
     flex-shrink: 0;
-
-    padding:
-        0.7rem
-        1.2rem;
-
-    border:
-        1px solid #cbd5e1;
-
+    padding: 0.7rem 1.2rem;
+    border: 1px solid #cbd5e1;
     border-radius: 8px;
-
-    background: white;
-
+    background: #fff;
     color: #334155;
-
     font-size: 0.9rem;
-
     font-weight: 600;
-
     text-decoration: none;
-
     transition:
         border-color 0.2s ease,
         background 0.2s ease,
         color 0.2s ease;
-
 }
-
 
 .back-button:hover {
-
     border-color: #2563eb;
-
     background: #eff6ff;
-
     color: #2563eb;
-
 }
-
-
-/* =========================================
-   EDITOR WORKSPACE
-   ========================================= */
 
 .editor-workspace {
-
+    display: block;
     width: 100%;
-
-    display: grid;
-
-    grid-template-columns:
-        260px
-        minmax(0, 1fr);
-
-    gap: 2rem;
-
-    align-items: start;
-
+    min-width: 0;
 }
 
-
-/* =========================================
-   EDITING TOOLS
-   ========================================= */
-
-.editor-tools {
-
-    position: sticky;
-
-    top: 100px;
-
-    padding: 1.25rem;
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 0.75rem;
-
-    background: white;
-
-    border:
-        1px solid #e2e8f0;
-
-    border-radius: 14px;
-
-    box-shadow:
-        0 8px 25px
-        rgba(15, 23, 42, 0.06);
-
-}
-
-
-.editor-tools h2 {
-
-    margin-bottom: 0.5rem;
-
-    font-size: 1rem;
-
-    color: #0f172a;
-
-}
-
-
-/* =========================================
-   TOOL BUTTONS
-   ========================================= */
-
-.editor-tools button {
-
-    width: 100%;
-
-    min-height: 48px;
-
-    padding:
-        0.75rem
-        1rem;
-
-    border:
-        1px solid #e2e8f0;
-
-    border-radius: 9px;
-
-    background: white;
-
-    color: #334155;
-
-    font-size: 0.9rem;
-
-    font-weight: 600;
-
-    text-align: left;
-
-    cursor: pointer;
-
-    transition:
-        background 0.2s ease,
-        border-color 0.2s ease,
-        color 0.2s ease,
-        transform 0.2s ease;
-
-}
-
-
-.editor-tools button:hover {
-
-    border-color: #bfdbfe;
-
-    background: #eff6ff;
-
-    color: #2563eb;
-
-    transform: translateY(-1px);
-
-}
-
-
-.editor-tools button:active {
-
-    transform: translateY(0);
-
-}
-
-
-/* =========================================
-   PDF DOCUMENT
-   ========================================= */
+/* Main document container */
 
 .editor-document {
-
     width: 100%;
-
-    height: calc(100vh - 190px);
-
-    min-height: 700px;
-
-    padding: 1.5rem;
-
-    background: #e2e8f0;
-
-    border:
-        1px solid #e2e8f0;
-
+    min-width: 0;
+    padding: 1.25rem;
+    box-sizing: border-box;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
     border-radius: 18px;
-
-    overflow: auto;
-
-    box-shadow:
-        0 15px 40px
-        rgba(15, 23, 42, 0.08);
-
+    box-shadow: 0 15px 40px rgba(15, 23, 42, 0.08);
 }
 
-/* =========================================
-   PDF.JS VIEWER
-   ========================================= */
+/* Toolbar sits above the PDF */
+
+.editor-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    width: 100%;
+    margin-bottom: 0.75rem;
+    padding: 0.9rem;
+    box-sizing: border-box;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+}
+
+.editor-document-selector {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 0;
+}
+
+.editor-document-selector label {
+    color: #334155;
+    font-size: 0.9rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+#editor-document-select {
+    width: min(360px, 45vw);
+    min-width: 190px;
+    padding: 0.65rem 0.8rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #fff;
+    color: #0f172a;
+    font: inherit;
+}
+
+/* Toolbar buttons */
+
+.editor-tool-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tool-button {
+    min-height: 42px;
+    padding: 0.65rem 1rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #fff;
+    color: #334155;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        border-color 0.15s ease,
+        background 0.15s ease,
+        color 0.15s ease;
+}
+
+.tool-button:hover:not(:disabled) {
+    border-color: #93c5fd;
+    background: #eff6ff;
+    color: #1d4ed8;
+}
+
+.tool-button.active,
+.tool-button[aria-pressed="true"] {
+    border-color: #2563eb;
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.tool-button-primary {
+    border-color: #1d4ed8;
+    background: #2563eb;
+    color: #fff;
+}
+
+.tool-button-primary:hover:not(:disabled) {
+    border-color: #1e40af;
+    background: #1d4ed8;
+    color: #fff;
+}
+
+.tool-button:disabled {
+    opacity: 0.48;
+    cursor: not-allowed;
+}
+
+.tool-button:focus-visible,
+#editor-document-select:focus-visible,
+.back-button:focus-visible {
+    outline: 2px solid #2563eb;
+    outline-offset: 2px;
+}
+
+/* Status message */
+
+.editor-status {
+    min-height: 1.25rem;
+    margin: 0 0 0.75rem;
+    color: #64748b;
+    font-size: 0.85rem;
+}
+
+/* PDF viewer */
+
+.pdf-viewer {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 300px);
+    min-height: 650px;
+    overflow: auto;
+    padding: 1.5rem;
+    box-sizing: border-box;
+    background: #e2e8f0;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+}
 
 .pdf-pages {
-
-    width: 100%;
-
     display: flex;
-
     flex-direction: column;
-
     align-items: center;
-
     gap: 1.5rem;
-
+    width: 100%;
+    min-height: 1px;
 }
-
 
 .pdf-page {
-
     position: relative;
-
-    flex-shrink: 0;
-
-    background: white;
-
-    box-shadow:
-        0 5px 15px
-        rgba(15, 23, 42, 0.15);
-
+    flex: 0 0 auto;
+    background: #fff;
+    box-shadow: 0 5px 15px rgba(15, 23, 42, 0.15);
 }
-
 
 .pdf-canvas {
-
+    position: relative;
+    z-index: 1;
     display: block;
-
 }
 
-
-/* =========================================
-   TEXT LAYER
-   ========================================= */
+/* PDF.js text selection layer */
 
 .textLayer {
-
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    line-height: 1;
+    text-align: initial;
+    transform-origin: 0 0;
     z-index: 2;
-
 }
 
-
-.textLayer span {
-
+.textLayer span,
+.textLayer br {
+    position: absolute;
+    color: transparent;
+    white-space: pre;
     cursor: text;
-
+    transform-origin: 0 0;
 }
-
 
 .textLayer ::selection {
-
-    background:
-        rgba(
-            37,
-            99,
-            235,
-            0.3
-        );
-
+    background: rgba(37, 99, 235, 0.3);
 }
 
+/* Annotation layer */
 
-/* =========================================
-   PDF LOADING
-   ========================================= */
+.pdf-annotations-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    pointer-events: none;
+}
+
+.pdf-annotation-item {
+    position: absolute;
+    box-sizing: border-box;
+}
+
+/* Highlight annotations */
+
+.pdf-highlight-overlay {
+    background: rgba(255, 226, 64, 0.48);
+    border-radius: 1px;
+    pointer-events: auto;
+    cursor: grab;
+    touch-action: none;
+}
+
+.pdf-highlight-overlay:active {
+    cursor: grabbing;
+}
+
+/* White overlay used when covering existing PDF text */
+
+.pdf-erase-overlay {
+    background: #fff;
+    pointer-events: none;
+}
+
+/* Delete button displayed when hovering over a highlight */
+
+.highlight-delete-button {
+    position: absolute;
+    z-index: 10;
+    top: -10px;
+    right: -10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: 1px solid #fff;
+    border-radius: 50%;
+    background: #dc2626;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.9);
+    transition:
+        opacity 0.12s ease,
+        transform 0.12s ease;
+}
+
+.pdf-highlight-group:hover .highlight-delete-button,
+.pdf-highlight-group:focus-within .highlight-delete-button,
+.highlight-delete-button:focus-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: scale(1);
+}
+
+.pdf-highlight-group {
+    position: absolute;
+    overflow: visible;
+    pointer-events: none;
+}
+
+.pdf-highlight-group .pdf-highlight-overlay {
+    inset: 0;
+}
+
+.pdf-highlight-group .highlight-delete-button {
+    pointer-events: auto;
+}
+
+/* Text annotations */
+
+.pdf-text-annotation {
+    min-width: 2px;
+    min-height: 1.15em;
+    color: #111827;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.15;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    pointer-events: auto;
+    cursor: default;
+}
+
+.pdf-text-annotation[contenteditable="true"] {
+    min-width: 48px;
+    outline: 1px dashed rgba(37, 99, 235, 0.65);
+    background: rgba(255, 255, 255, 0.35);
+    cursor: text;
+    caret-color: #1d4ed8;
+}
+
+.pdf-text-annotation[contenteditable="true"]:empty::before {
+    content: attr(data-placeholder);
+    color: #9ca3af;
+    pointer-events: none;
+}
+
+.pdf-text-annotation[contenteditable="true"]:focus {
+    outline: 1px solid #2563eb;
+    background: rgba(255, 255, 255, 0.7);
+}
+
+/* Loading and error states */
 
 .pdf-loading {
-
-    padding: 3rem;
-
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 180px;
+    padding: 2rem;
     color: #64748b;
-
     text-align: center;
-
-    font-size: 0.9rem;
-
+    font-size: 0.95rem;
 }
 
+.pdf-loading[hidden],
+.pdf-error[hidden] {
+    display: none !important;
+}
 
-/* =========================================
-   TABLET
-   ========================================= */
+.pdf-error {
+    margin: 1rem 0;
+    padding: 1rem;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    background: #fef2f2;
+    color: #991b1b;
+    font-size: 0.9rem;
+}
+
+/* Tablet layout */
 
 @media (max-width: 1000px) {
-
-    .editor-workspace {
-
-        grid-template-columns: 1fr;
-
+    .pdf-viewer {
+        height: 700px;
+        min-height: 600px;
     }
 
-
-    .editor-tools {
-
-        position: static;
-
-        display: grid;
-
-        grid-template-columns:
-            repeat(
-                2,
-                minmax(0, 1fr)
-            );
-
+    .editor-toolbar {
+        align-items: stretch;
+        flex-direction: column;
     }
 
-
-    .editor-tools h2 {
-
-        grid-column: 1 / -1;
-
+    .editor-document-selector {
+        width: 100%;
     }
 
-
-    .editor-document {
-
-        height: 650px;
-
-        min-height: 650px;
-
+    #editor-document-select {
+        flex: 1;
+        width: auto;
+        min-width: 0;
     }
 
+    .editor-tool-buttons {
+        justify-content: flex-start;
+    }
 }
 
-
-/* =========================================
-   MOBILE
-   ========================================= */
+/* Mobile layout */
 
 @media (max-width: 700px) {
-
     .editor-header {
-
         align-items: flex-start;
-
         flex-direction: column;
-
+        gap: 1rem;
     }
-
 
     .editor-header h1 {
-
-        max-width: 100%;
-
         font-size: 1.7rem;
-
     }
-
-
-    .editor-tools {
-
-        grid-template-columns: 1fr;
-
-    }
-
-
-    .editor-tools h2 {
-
-        grid-column: auto;
-
-    }
-
 
     .editor-document {
-
-        height: 550px;
-
-        min-height: 550px;
-
-        padding: 0.5rem;
-
+        padding: 0.6rem;
+        border-radius: 12px;
     }
 
+    .editor-document-selector {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    #editor-document-select {
+        width: 100%;
+    }
+
+    .editor-tool-buttons {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+    }
+
+    .tool-button {
+        width: 100%;
+        padding: 0.6rem 0.5rem;
+    }
+
+    .pdf-viewer {
+        height: 550px;
+        min-height: 500px;
+        padding: 0.5rem;
+    }
+}
+
+/* Text annotation wrapper */
+.pdf-text-group {
+    position: absolute;
+    display: block;
+    min-width: 48px;
+    max-width: 100%;
+    overflow: visible;
+    pointer-events: auto;
+    z-index: 8;
+}
+
+/* Editable text */
+.pdf-text-annotation {
+    position: relative;
+    display: block;
+    box-sizing: border-box;
+    min-width: 48px;
+    min-height: 1.15em;
+    max-width: 100%;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    pointer-events: auto;
+    cursor: text;
+}
+
+.pdf-text-annotation[contenteditable="false"] {
+    cursor: grab;
+}
+
+.pdf-text-annotation[contenteditable="true"] {
+    outline: 1px dashed rgba(37, 99, 235, 0.65);
+    background: rgba(255, 255, 255, 0.35);
+    caret-color: #1d4ed8;
+}
+
+.pdf-text-annotation[contenteditable="true"]:focus {
+    outline: 1px solid #2563eb;
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.pdf-text-annotation[contenteditable="true"]:empty::before {
+    content: attr(data-placeholder);
+    color: #9ca3af;
+    pointer-events: none;
+}
+
+/* Text drag and delete controls */
+.pdf-text-drag-handle,
+.pdf-text-delete-button {
+    position: absolute;
+    z-index: 12;
+    top: -23px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    color: #fff;
+    font: 700 13px/1 Arial, sans-serif;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.12s ease;
+}
+
+.pdf-text-drag-handle {
+    left: 0;
+    background: #2563eb;
+    cursor: grab;
+    touch-action: none;
+}
+
+.pdf-text-delete-button {
+    right: 0;
+    background: #dc2626;
+    font-size: 17px;
+}
+
+.pdf-text-group:hover .pdf-text-drag-handle,
+.pdf-text-group:hover .pdf-text-delete-button,
+.pdf-text-group:focus-within .pdf-text-drag-handle,
+.pdf-text-group:focus-within .pdf-text-delete-button,
+.pdf-text-drag-handle:focus-visible,
+.pdf-text-delete-button:focus-visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Keep each highlight strictly inside its own selection rectangle. */
+.pdf-annotations-layer {
+    overflow: hidden;
+}
+
+.pdf-highlight-group {
+    position: absolute;
+    box-sizing: border-box;
+    overflow: visible;
+    pointer-events: none;
+}
+
+.pdf-highlight-group .pdf-highlight-overlay {
+    position: absolute;
+    inset: auto !important;
+    left: 0 !important;
+    top: 0 !important;
+    right: auto !important;
+    bottom: auto !important;
+    width: 100% !important;
+    height: 100% !important;
+    box-sizing: border-box;
+    pointer-events: auto;
 }
