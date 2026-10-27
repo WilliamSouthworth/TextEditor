@@ -1,43 +1,200 @@
-<!-- 
-    Page Purpose: N/A
-        - N/A
+<!--
+    Page Purpose:
+        - Reorder, rotate, and remove pages from uploaded PDF documents.
 
     Supporting Files:
-        - Inheritance Layout: app\templates\layout.html
-        - CSS: app\static\css\sort.css
-        - JS: app\static\js\sort.js
-        - Python: 
-            - app\routes\sort.py
+        - Inheritance Layout: app/templates/layout.html
+        - CSS: app/static/css/sort.css
+        - JS: app/static/js/sort.js
+        - Python: app/routes/sort.py
 
-    Notes: 
-        - N/A
-
-    Problems:
-        - N/A
-
-    Stuff to add:
-        - N/A
+    Notes:
+        - Uses PDFs uploaded in the current Flask session.
+        - Changes are applied to a newly downloaded PDF, not the original.
 -->
 
 {% extends "layout.html" %}
 
 {% block title %}
-PDF Editor
+PDF Page Sorter
 {% endblock %}
 
+{% block head %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/sort.css') }}"
+>
+{% endblock %}
 
 {% block content %}
 
-<div style="text-align: center; padding: 5rem 1rem;">
+<main
+    class="sort-container"
+    id="sort-app"
+    data-sort-url="{{ url_for('sort.sort_pdf') }}"
+>
+    <header class="sort-header">
+        <div>
+            <span class="sort-eyebrow">PDF WORKSPACE</span>
 
-    <h1>
-        PDF Sorter
-    </h1>
+            <h1>PDF Page Sorter</h1>
 
-    <p style="color: #64748b; margin-top: 1rem;">
-        Coming soon.
-    </p>
+            <p>
+                Rearrange pages, rotate them, or remove unwanted pages.
+                The downloaded PDF will use the order shown below.
+            </p>
+        </div>
 
-</div>
+        <a
+            class="sort-back-button"
+            href="{{ url_for('main.index') }}"
+        >
+            Back to Documents
+        </a>
+    </header>
+
+    <section class="sort-panel">
+        <div class="sort-toolbar">
+            <div class="sort-document-selector">
+                <label for="sort-document-select">Document</label>
+
+                <select id="sort-document-select">
+                    {% for document in documents %}
+                    <option
+                        value="{{ document.id }}"
+                        data-file-url="{{ document.file_url }}"
+                        data-filename="{{ document.filename }}"
+                        {% if document.id|string == current_document_id|string %}
+                        selected
+                        {% endif %}
+                    >
+                        {{ document.filename }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="sort-toolbar-buttons">
+                <button
+                    type="button"
+                    id="sort-undo"
+                    class="sort-button"
+                    disabled
+                >
+                    Undo
+                </button>
+
+                <button
+                    type="button"
+                    id="sort-redo"
+                    class="sort-button"
+                    disabled
+                >
+                    Redo
+                </button>
+
+                <button
+                    type="button"
+                    id="sort-reset"
+                    class="sort-button"
+                    disabled
+                >
+                    Reset
+                </button>
+
+                <button
+                    type="button"
+                    id="sort-save"
+                    class="sort-button sort-button-primary"
+                    disabled
+                >
+                    Save PDF
+                </button>
+            </div>
+        </div>
+
+        {% if documents %}
+
+        <div class="sort-summary">
+            <div>
+                <h2>Pages</h2>
+
+                <p>
+                    Drag a page by its handle to reorder it.
+                    Use Rotate to change its orientation or Remove
+                    to exclude it from the downloaded PDF.
+                </p>
+            </div>
+
+            <span
+                id="sort-page-count"
+                class="sort-page-count"
+            >
+                Loading pages…
+            </span>
+        </div>
+
+        <div
+            id="sort-status"
+            class="sort-status"
+            role="status"
+            aria-live="polite"
+        >
+            Loading PDF…
+        </div>
+
+        <div
+            id="sort-error"
+            class="sort-error"
+            role="alert"
+            hidden
+        ></div>
+
+        <div
+            id="sort-page-grid"
+            class="sort-page-grid"
+            aria-label="PDF pages in current order"
+        ></div>
+
+        <div class="sort-footer">
+            <p>
+                The original uploaded PDF is not overwritten.
+            </p>
+
+            <button
+                type="button"
+                id="sort-save-bottom"
+                class="sort-button sort-button-primary"
+                disabled
+            >
+                Download Sorted PDF
+            </button>
+        </div>
+
+        {% else %}
+
+        <div class="sort-empty-state">
+            <h2>No uploaded PDFs found</h2>
+
+            <p>
+                Return to Documents and upload a PDF before sorting pages.
+            </p>
+
+            <a
+                class="sort-button sort-button-primary"
+                href="{{ url_for('main.index') }}"
+            >
+                Go to Documents
+            </a>
+        </div>
+
+        {% endif %}
+    </section>
+</main>
+
+{% if documents %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="{{ url_for('static', filename='js/sort.js') }}"></script>
+{% endif %}
 
 {% endblock %}
