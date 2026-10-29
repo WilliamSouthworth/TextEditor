@@ -22,7 +22,7 @@
         or after a certain amount of time (maybe one of the libraries have this?)
         - I would like to remove the iFrame that the pdf goes into, it looks like shit plus
         the tool bar attached to it is not removable since its not something we built
-    
+
     Stuff to add:
         - A way for users to upload multiple pdfs rather than just one then a way for users
         to switch between the pdfs they uploaded, maybe have everything saved to local memory?
@@ -121,22 +121,23 @@ Home - Text Editor
                 </div>
 
 
-                <!-- File picker -->
+                <!-- =========================================
+                    FILE PICKER
+                    Supports selecting multiple PDFs
+                    ========================================= -->
 
                 <label
                     for="pdf-file"
                     class="file-label"
                 >
-
                     Choose PDF(s)
-
                 </label>
-
 
                 <input
                     type="file"
                     id="pdf-file"
                     accept=".pdf,application/pdf"
+                    multiple
                 >
 
 
@@ -445,14 +446,136 @@ Home - Text Editor
 
 
 
-            <!-- PDF viewer -->
+            <!-- =========================================
+                PDF DOCUMENT SWITCHER
+                Allows users to switch between uploaded PDFs
+                ========================================= -->
 
-            <div class="pdf-preview">
+            <div class="document-switcher">
 
-                <iframe
-                    id="pdf-viewer"
-                    title="PDF Preview"
-                ></iframe>
+                <label for="pdf-select">
+                    Uploaded PDFs
+                </label>
+
+                <select id="pdf-select">
+                    <!-- JavaScript adds the uploaded PDFs here. -->
+                </select>
+
+                <button
+                    type="button"
+                    id="add-pdf-button"
+                >
+                    Add PDF(s)
+                </button>
+
+                <input
+                    type="file"
+                    id="additional-pdf-file"
+                    accept=".pdf,application/pdf"
+                    multiple
+                    hidden
+                >
+
+                <button
+                    type="button"
+                    id="delete-pdf-button"
+                    class="delete-pdf-button"
+                >
+                    Delete PDF
+                </button>
+
+            </div>
+
+
+
+            <!-- =========================================
+                CUSTOM PDF VIEWER
+                Displays the currently selected PDF
+                without the browser's embedded PDF toolbar
+                ========================================= -->
+
+            <div
+                class="pdf-viewer-toolbar"
+                aria-label="PDF viewer controls"
+            >
+
+                <button
+                    type="button"
+                    id="pdf-prev-page"
+                    aria-label="Previous page"
+                >
+                    ‹
+                </button>
+
+
+                <label for="pdf-page-number">
+                    Page
+                </label>
+
+
+                <input
+                    type="number"
+                    id="pdf-page-number"
+                    min="1"
+                    value="1"
+                >
+
+
+                <span id="pdf-page-count">
+                    of 0
+                </span>
+
+
+                <button
+                    type="button"
+                    id="pdf-next-page"
+                    aria-label="Next page"
+                >
+                    ›
+                </button>
+
+
+                <span class="viewer-toolbar-spacer"></span>
+
+
+                <button
+                    type="button"
+                    id="pdf-zoom-out"
+                    aria-label="Zoom out"
+                >
+                    −
+                </button>
+
+
+                <span id="pdf-zoom-level">
+                    100%
+                </span>
+
+
+                <button
+                    type="button"
+                    id="pdf-zoom-in"
+                    aria-label="Zoom in"
+                >
+                    +
+                </button>
+
+            </div>
+
+
+
+            <!-- PDF.js renders the PDF pages into this container. -->
+
+            <div
+                class="pdf-preview"
+                id="pdf-preview"
+            >
+
+                <div
+                    id="pdf-pages"
+                    class="pdf-pages"
+                    aria-label="PDF pages"
+                ></div>
 
             </div>
 
@@ -495,6 +618,15 @@ Home - Text Editor
 
 
 {% block scripts %}
+
+<!-- PDF.js library for rendering PDFs without an embedded browser toolbar. -->
+
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"
+></script>
+
+
+<!-- Workspace functionality -->
 
 <script
     src="{{ url_for('static', filename='js/home.js') }}"

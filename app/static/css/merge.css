@@ -1,0 +1,442 @@
+/* =========================================
+   PDF MERGER PAGE
+   ========================================= */
+
+.merge-container {
+    width: 100%;
+    min-width: 0;
+    margin: 0 auto;
+}
+
+.merge-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.merge-eyebrow {
+    display: inline-block;
+    color: #2563eb;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.merge-header h1 {
+    margin: 0.5rem 0 0;
+    font-size: 2rem;
+    letter-spacing: -0.035em;
+}
+
+.merge-header p {
+    max-width: 680px;
+    margin: 0.6rem 0 0;
+    color: #64748b;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.merge-back-button {
+    flex-shrink: 0;
+    padding: 0.7rem 1.1rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #fff;
+    color: #334155;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease;
+}
+
+.merge-back-button:hover {
+    border-color: #93c5fd;
+    background: #eff6ff;
+}
+
+/* Main panel */
+
+.merge-panel {
+    width: 100%;
+    padding: 1.5rem;
+    box-sizing: border-box;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.06);
+}
+
+.merge-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.merge-panel-header h2 {
+    margin: 0;
+    font-size: 1.15rem;
+    color: #0f172a;
+}
+
+.merge-panel-header p {
+    margin: 0.5rem 0 0;
+    color: #64748b;
+    font-size: 0.88rem;
+    line-height: 1.5;
+}
+
+.merge-selection-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+/* Buttons */
+
+.merge-primary-button,
+.merge-secondary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 0.7rem 1rem;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 650;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease;
+}
+
+.merge-primary-button {
+    border-color: #1d4ed8;
+    background: #2563eb;
+    color: #fff;
+}
+
+.merge-primary-button:hover:not(:disabled) {
+    border-color: #1e40af;
+    background: #1d4ed8;
+}
+
+.merge-secondary-button {
+    border-color: #cbd5e1;
+    background: #fff;
+    color: #334155;
+}
+
+.merge-secondary-button:hover:not(:disabled) {
+    border-color: #93c5fd;
+    background: #eff6ff;
+    color: #1d4ed8;
+}
+
+.merge-primary-button:disabled,
+.merge-secondary-button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.merge-primary-button:focus-visible,
+.merge-secondary-button:focus-visible,
+.merge-back-button:focus-visible {
+    outline: 2px solid #2563eb;
+    outline-offset: 2px;
+}
+
+/* Document list */
+
+.merge-file-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.merge-file-row {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    min-width: 0;
+    padding: 0.9rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background: #fff;
+    transition:
+        border-color 0.15s ease,
+        background 0.15s ease,
+        opacity 0.15s ease;
+}
+
+.merge-file-row:hover {
+    border-color: #cbd5e1;
+}
+
+.merge-file-row.is-selected {
+    border-color: #93c5fd;
+    background: #f8fbff;
+}
+
+.merge-file-row.is-dragging {
+    opacity: 0.45;
+}
+
+.merge-file-row.is-drop-target {
+    border-color: #2563eb;
+    background: #eff6ff;
+}
+
+/* Drag handle */
+
+.merge-drag-handle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 28px;
+    height: 36px;
+    border-radius: 5px;
+    color: #94a3b8;
+    font-size: 1.3rem;
+    font-weight: 700;
+    cursor: grab;
+    user-select: none;
+    touch-action: none;
+}
+
+.merge-drag-handle:hover,
+.merge-drag-handle:focus-visible {
+    background: #eff6ff;
+    color: #2563eb;
+    outline: none;
+}
+
+.merge-drag-handle:active {
+    cursor: grabbing;
+}
+
+/* File information */
+
+.merge-file-selection {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    flex: 1;
+    min-width: 0;
+    cursor: pointer;
+}
+
+.merge-file-checkbox {
+    flex-shrink: 0;
+    width: 17px;
+    height: 17px;
+    margin: 0;
+    accent-color: #2563eb;
+    cursor: pointer;
+}
+
+.merge-pdf-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 42px;
+    height: 48px;
+    border: 1px solid #fecaca;
+    border-radius: 7px;
+    background: #fef2f2;
+    color: #b91c1c;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+}
+
+.merge-file-information {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    min-width: 0;
+}
+
+.merge-file-name {
+    overflow-wrap: anywhere;
+    color: #0f172a;
+    font-size: 0.92rem;
+    font-weight: 650;
+}
+
+.merge-file-description {
+    color: #64748b;
+    font-size: 0.78rem;
+}
+
+.merge-order-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    border: 1px solid #e2e8f0;
+    border-radius: 50%;
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+/* Status and errors */
+
+.merge-status {
+    min-height: 1.3rem;
+    margin-top: 1rem;
+    color: #64748b;
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+.merge-error {
+    margin-top: 0.75rem;
+    padding: 0.85rem 1rem;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    background: #fef2f2;
+    color: #991b1b;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.merge-error[hidden] {
+    display: none !important;
+}
+
+/* Footer */
+
+.merge-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+.merge-footer-information {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.merge-footer-information strong {
+    color: #0f172a;
+    font-size: 0.9rem;
+}
+
+.merge-footer-information span {
+    color: #64748b;
+    font-size: 0.8rem;
+    line-height: 1.5;
+}
+
+/* Empty state */
+
+.merge-empty-state {
+    padding: 3rem 1.25rem;
+    border: 1px dashed #cbd5e1;
+    border-radius: 12px;
+    background: #f8fafc;
+    text-align: center;
+}
+
+.merge-empty-state h3 {
+    margin: 0;
+    color: #0f172a;
+    font-size: 1.05rem;
+}
+
+.merge-empty-state p {
+    max-width: 460px;
+    margin: 0.75rem auto 1.25rem;
+    color: #64748b;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.merge-upload-link {
+    display: inline-flex;
+}
+
+/* Responsive layout */
+
+@media (max-width: 720px) {
+    .merge-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .merge-header h1 {
+        font-size: 1.7rem;
+    }
+
+    .merge-panel {
+        padding: 0.9rem;
+        border-radius: 12px;
+    }
+
+    .merge-panel-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .merge-file-row {
+        gap: 0.45rem;
+        padding: 0.7rem 0.5rem;
+    }
+
+    .merge-file-selection {
+        gap: 0.55rem;
+    }
+
+    .merge-pdf-icon {
+        width: 36px;
+        height: 42px;
+    }
+
+    .merge-file-name {
+        font-size: 0.84rem;
+    }
+
+    .merge-order-number {
+        width: 25px;
+        height: 25px;
+        font-size: 0.72rem;
+    }
+
+    .merge-footer {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .merge-footer .merge-primary-button {
+        width: 100%;
+    }
+}

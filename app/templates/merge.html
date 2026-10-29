@@ -1,16 +1,16 @@
-<!-- 
-    Page Purpose: N/A
-        - N/A
+<!--
+    Page Purpose:
+        - Select and merge multiple uploaded PDF documents.
 
     Supporting Files:
-        - Inheritance Layout: app\templates\layout.html
-        - CSS: app\static\css\merge.css
-        - JS: app\static\js\merge.js
-        - Python: 
-            - app\routes\merge.py
+        - Inheritance Layout: app/templates/layout.html
+        - CSS: app/static/css/merge.css
+        - JS: app/static/js/merge.js
+        - Python: app/routes/merge.py
 
-    Notes: 
-        - N/A
+    Notes:
+        - Uses PDFs already uploaded in the current Flask session.
+        - Selected PDF order determines the order in the merged document.
 
     Problems:
         - N/A
@@ -22,22 +22,199 @@
 {% extends "layout.html" %}
 
 {% block title %}
-PDF Editor
+PDF Merger
 {% endblock %}
 
+{% block head %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/merge.css') }}"
+>
+{% endblock %}
 
 {% block content %}
 
-<div style="text-align: center; padding: 5rem 1rem;">
+<main
+    class="merge-container"
+    id="merge-app"
+    data-merge-url="{{ url_for('merge.merge_pdfs') }}"
+>
+    <header class="merge-header">
+        <div>
+            <span class="merge-eyebrow">PDF WORKSPACE</span>
 
-    <h1>
-        PDF Merger
-    </h1>
+            <h1>PDF Merger</h1>
 
-    <p style="color: #64748b; margin-top: 1rem;">
-        Coming soon.
-    </p>
+            <p>
+                Combine multiple PDF documents into a single file.
+                Choose the documents and arrange them in the order
+                you want them merged.
+            </p>
+        </div>
 
-</div>
+        <a
+            class="merge-back-button"
+            href="{{ url_for('main.index') }}"
+        >
+            Back to Documents
+        </a>
+    </header>
+
+    <section class="merge-panel">
+        <div class="merge-panel-header">
+            <div>
+                <h2>Documents to merge</h2>
+
+                <p>
+                    Select at least two PDFs. Drag a document using
+                    its handle to change the order.
+                </p>
+            </div>
+
+            <div class="merge-selection-actions">
+                <button
+                    type="button"
+                    id="merge-select-all"
+                    class="merge-secondary-button"
+                    {% if not documents %}
+                    disabled
+                    {% endif %}
+                >
+                    Select All
+                </button>
+
+                <button
+                    type="button"
+                    id="merge-clear-selection"
+                    class="merge-secondary-button"
+                    {% if not documents %}
+                    disabled
+                    {% endif %}
+                >
+                    Clear
+                </button>
+            </div>
+        </div>
+
+        {% if documents %}
+
+        <ul
+            id="merge-file-list"
+            class="merge-file-list"
+            aria-label="PDF documents, in merge order"
+        >
+            {% for document in documents %}
+
+            <li
+                class="merge-file-row"
+                data-document-id="{{ document.id }}"
+                draggable="false"
+            >
+                <span
+                    class="merge-drag-handle"
+                    draggable="true"
+                    tabindex="0"
+                    role="button"
+                    aria-label="Drag {{ document.filename }} to reorder"
+                    title="Drag to reorder"
+                >
+                    &#8942;&#8942;
+                </span>
+
+                <label class="merge-file-selection">
+                    <input
+                        type="checkbox"
+                        class="merge-file-checkbox"
+                        value="{{ document.id }}"
+                    >
+
+                    <span class="merge-pdf-icon" aria-hidden="true">
+                        PDF
+                    </span>
+
+                    <span class="merge-file-information">
+                        <span class="merge-file-name">
+                            {{ document.filename }}
+                        </span>
+
+                        <span class="merge-file-description">
+                            PDF document
+                        </span>
+                    </span>
+                </label>
+
+                <span
+                    class="merge-order-number"
+                    aria-label="Document order"
+                >
+                    {{ loop.index }}
+                </span>
+            </li>
+
+            {% endfor %}
+        </ul>
+
+        {% else %}
+
+        <div class="merge-empty-state">
+            <h3>No uploaded PDFs found</h3>
+
+            <p>
+                Return to the Documents page and upload the PDF files
+                you want to combine.
+            </p>
+
+            <a
+                class="merge-primary-button merge-upload-link"
+                href="{{ url_for('main.index') }}"
+            >
+                Go to Documents
+            </a>
+        </div>
+
+        {% endif %}
+
+        <div
+            id="merge-status"
+            class="merge-status"
+            role="status"
+            aria-live="polite"
+        >
+            {% if documents %}
+                Select at least two PDFs to begin.
+            {% else %}
+                Upload PDFs before using the merger.
+            {% endif %}
+        </div>
+
+        <div
+            id="merge-error"
+            class="merge-error"
+            role="alert"
+            hidden
+        ></div>
+
+        <div class="merge-footer">
+            <div class="merge-footer-information">
+                <strong id="merge-selected-count">0 selected</strong>
+
+                <span>
+                    The original uploaded PDFs will remain unchanged.
+                </span>
+            </div>
+
+            <button
+                type="button"
+                id="merge-submit"
+                class="merge-primary-button"
+                disabled
+            >
+                Merge PDFs
+            </button>
+        </div>
+    </section>
+</main>
+
+<script src="{{ url_for('static', filename='js/merge.js') }}"></script>
 
 {% endblock %}
