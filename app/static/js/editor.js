@@ -435,21 +435,86 @@
                 const pageWrapper = group.closest(".pdf-page");
                 const pageRect = pageWrapper.getBoundingClientRect();
 
+                const documentId =
+                    String(annotation.documentId);
+
+
+                /*
+                * A multi-line highlight is stored as several
+                * rectangles that share the same group ID.
+                *
+                * Find every rectangle in this highlight so
+                * they can all move together.
+                */
+                const groupedAnnotations =
+                    annotation.highlightGroupId
+                        ? getAnnotations(documentId).filter(
+                            (item) =>
+                                item.type === "highlight" &&
+                                item.highlightGroupId ===
+                                    annotation.highlightGroupId
+                        )
+                        : [annotation];
+
+
+                /*
+                * Find the visible DOM element for every
+                * rectangle in the highlight group.
+                */
+                const groupedElements =
+                    groupedAnnotations
+                        .map((item) =>
+                            pageWrapper.querySelector(
+                                `.pdf-highlight-group[data-annotation-id="${CSS.escape(item.id)}"]`
+                            )
+                        )
+                        .filter(Boolean);
+
+
                 activeDrag = {
-                    documentId: String(annotation.documentId),
-                    annotationId: annotation.id,
-                    pageNumber: annotation.pageNumber,
-                    viewport,
-                    pageRect,
-                    startClientX: event.clientX,
-                    startClientY: event.clientY,
-                    currentDx: 0,
-                    currentDy: 0,
-                    moved: false,
-                    beforeSnapshot: clone(
-                        getAnnotations(annotation.documentId)
-                    ),
-                    elements: [group],
+
+                    kind:
+                        "highlight-group",
+
+                    documentId:
+                        documentId,
+
+                    annotationIds:
+                        groupedAnnotations.map(
+                            (item) => item.id
+                        ),
+
+                    pageNumber:
+                        annotation.pageNumber,
+
+                    viewport:
+                        viewport,
+
+                    pageRect:
+                        pageRect,
+
+                    startClientX:
+                        event.clientX,
+
+                    startClientY:
+                        event.clientY,
+
+                    currentDx:
+                        0,
+
+                    currentDy:
+                        0,
+
+                    moved:
+                        false,
+
+                    beforeSnapshot:
+                        clone(
+                            getAnnotations(documentId)
+                        ),
+
+                    elements:
+                        groupedElements
                 };
 
                 try {
@@ -1794,68 +1859,185 @@
         }
 
         function finishDrag() {
-            if (!activeDrag) return;
 
-            const drag = activeDrag;
-            activeDrag = null;
+            if (!activeDrag) {
+                return;
+            }
 
-            drag.elements.forEach((element) => {
-                element.style.transform = "";
-            });
 
-            if (!drag.moved) return;
+            const drag =
+                activeDrag;
 
-            const annotation = getAnnotation(
-                drag.documentId,
-                drag.annotationId
+            activeDrag =
+                null;
+
+
+            /*
+            * Remove the temporary CSS movement.
+            * The permanent coordinates are updated below.
+            */
+            drag.elements.forEach(
+                (element) => {
+
+                    element.style.transform =
+                        "";
+
+                }
             );
 
-            if (!annotation) return;
 
-            const start = drag.viewport.convertToPdfPoint(
-                drag.startClientX - drag.pageRect.left,
-                drag.startClientY - drag.pageRect.top
-            );
+            /*
+            * Ignore a click that never became
+            * an actual drag.
+            */
+            if (!drag.moved) {
+                return;
+            }
 
-            const end = drag.viewport.convertToPdfPoint(
-                drag.startClientX +
-                    drag.currentDx -
-                    drag.pageRect.left,
-                drag.startClientY +
-                    drag.currentDy -
-                    drag.pageRect.top
-            );
 
-            const deltaX = end[0] - start[0];
-            const deltaY = end[1] - start[1];
+            /*
+            * Convert the mouse movement from
+            * screen coordinates into PDF coordinates.
+            */
+            const start =
+                drag.viewport.convertToPdfPoint(
+                    drag.startClientX -
+                        drag.pageRect.left,
 
+                    drag.startClientY -
+                        drag.pageRect.top
+                );
+
+
+            const end =
+                drag.viewport.convertToPdfPoint(
+                    drag.startClientX +
+                        drag.currentDx -
+                        drag.pageRect.left,
+
+                    drag.startClientY +
+                        drag.currentDy -
+                        drag.pageRect.top
+                );
+
+
+            const deltaX =
+                end[0] -
+                start[0];
+
+
+            const deltaY =
+                end[1] -
+                start[1];
+
+
+            /*
+            * Save the state before moving so
+            * the movement can be undone.
+            */
             recordHistory(
                 drag.documentId,
                 drag.beforeSnapshot
             );
 
-            if (annotation.type === "highlight") {
-                annotation.rect.x += deltaX;
-                annotation.rect.y += deltaY;
-            } else if (annotation.type === "text") {
-                annotation.x += deltaX;
-                annotation.y += deltaY;
+
+            /*
+            * MULTI-LINE HIGHLIGHT
+            *
+            * Every rectangle in the highlight group
+            * must move by the same amount.
+            */
+            if (
+                drag.kind ===
+                "highlight-group"
+            ) {
+
+                drag.annotationIds.forEach(
+                    (annotationId) => {
+
+                        const highlightAnnotation =
+                            getAnnotation(
+                                drag.documentId,
+                                annotationId
+                            );
+
+
+                        if (
+                            highlightAnnotation &&
+                            highlightAnnotation.type ===
+                                "highlight"
+                        ) {
+
+                            highlightAnnotation.rect.x +=
+                                deltaX;
+
+                            highlightAnnotation.rect.y +=
+                                deltaY;
+
+                        }
+
+                    }
+                );
+
+
+            } else if (
+                drag.kind === "text"
+            ) {
+
+                /*
+                * TEXT ANNOTATION
+                *
+                * Text annotations are moved
+                * individually.
+                */
+                const annotation =
+                    getAnnotation(
+                        drag.documentId,
+                        drag.annotationId
+                    );
+
+
+                if (!annotation) {
+                    return;
+                }
+
+
+                annotation.x +=
+                    deltaX;
+
+                annotation.y +=
+                    deltaY;
+
+
             } else {
+
                 return;
+
             }
 
+
+            /*
+            * Redraw the page using the new
+            * annotation coordinates.
+            */
             renderAnnotationsForPage(
                 drag.documentId,
                 drag.pageNumber
             );
 
+
             updateHistoryButtons();
 
+
             setStatus(
-                annotation.type === "highlight"
+                drag.kind ===
+                    "highlight-group"
+
                     ? "Highlight moved. Use Undo to reverse it."
+
                     : "Text moved. Use Undo to reverse it."
             );
+
         }
 
         async function saveEditedPdf() {
