@@ -1032,6 +1032,180 @@
             }
         }
 
+        function mergeSelectionRects(range, pageRect) {
+
+            const rawRects =
+                Array.from(range.getClientRects())
+                    .map((clientRect) => {
+
+                        const left = Math.max(
+                            pageRect.left,
+                            clientRect.left
+                        );
+
+                        const top = Math.max(
+                            pageRect.top,
+                            clientRect.top
+                        );
+
+                        const right = Math.min(
+                            pageRect.right,
+                            clientRect.right
+                        );
+
+                        const bottom = Math.min(
+                            pageRect.bottom,
+                            clientRect.bottom
+                        );
+
+
+                        return {
+                            left:
+                                left - pageRect.left,
+
+                            top:
+                                top - pageRect.top,
+
+                            right:
+                                right - pageRect.left,
+
+                            bottom:
+                                bottom - pageRect.top,
+
+                            width:
+                                right - left,
+
+                            height:
+                                bottom - top
+                        };
+
+                    })
+                    .filter(
+                        (rect) =>
+                            rect.width > 0 &&
+                            rect.height > 0
+                    )
+                    .sort(
+                        (a, b) =>
+                            a.top - b.top ||
+                            a.left - b.left
+                    );
+
+
+            const mergedRects = [];
+
+
+            rawRects.forEach((rect) => {
+
+                const previous =
+                    mergedRects[
+                        mergedRects.length - 1
+                    ];
+
+
+                if (previous) {
+
+                    /*
+                    * Determine whether both rectangles
+                    * belong to approximately the same
+                    * line of text.
+                    */
+
+                    const verticalOverlap =
+                        Math.min(
+                            previous.bottom,
+                            rect.bottom
+                        ) -
+                        Math.max(
+                            previous.top,
+                            rect.top
+                        );
+
+
+                    const minimumHeight =
+                        Math.min(
+                            previous.height,
+                            rect.height
+                        );
+
+
+                    const sameLine =
+                        verticalOverlap >=
+                        minimumHeight * 0.5;
+
+
+                    /*
+                    * PDF.js may leave small gaps between
+                    * individual text spans and words.
+                    */
+
+                    const horizontalGap =
+                        rect.left -
+                        previous.right;
+
+
+                    const gapTolerance =
+                        Math.max(
+                            12,
+                            minimumHeight * 0.8
+                        );
+
+
+                    if (
+                        sameLine &&
+                        horizontalGap <= gapTolerance
+                    ) {
+
+                        previous.left =
+                            Math.min(
+                                previous.left,
+                                rect.left
+                            );
+
+                        previous.top =
+                            Math.min(
+                                previous.top,
+                                rect.top
+                            );
+
+                        previous.right =
+                            Math.max(
+                                previous.right,
+                                rect.right
+                            );
+
+                        previous.bottom =
+                            Math.max(
+                                previous.bottom,
+                                rect.bottom
+                            );
+
+
+                        previous.width =
+                            previous.right -
+                            previous.left;
+
+                        previous.height =
+                            previous.bottom -
+                            previous.top;
+
+
+                        return;
+                    }
+
+                }
+
+
+                mergedRects.push({
+                    ...rect
+                });
+
+            });
+
+
+            return mergedRects;
+        }
+
         function highlightSelectedText() {
             const selection = window.getSelection();
 
@@ -1084,42 +1258,21 @@
             const pageRect = pageWrapper.getBoundingClientRect();
 
             // Keep only visible selection rectangles and clip them to the page.
-            const rects = Array.from(range.getClientRects())
-                .map((clientRect) => {
-                    const left = Math.max(
-                        pageRect.left,
-                        clientRect.left
-                    );
-
-                    const top = Math.max(
-                        pageRect.top,
-                        clientRect.top
-                    );
-
-                    const right = Math.min(
-                        pageRect.right,
-                        clientRect.right
-                    );
-
-                    const bottom = Math.min(
-                        pageRect.bottom,
-                        clientRect.bottom
-                    );
-
-                    const width = right - left;
-                    const height = bottom - top;
-
-                    if (width <= 0 || height <= 0) {
-                        return null;
-                    }
+            const rects =
+                mergeSelectionRects(
+                    range,
+                    pageRect
+                )
+                .map((rect) => {
 
                     return pdfRectFromViewport(
                         viewport,
-                        left - pageRect.left,
-                        top - pageRect.top,
-                        width,
-                        height
+                        rect.left,
+                        rect.top,
+                        rect.width,
+                        rect.height
                     );
+
                 })
                 .filter(
                     (rect) =>
