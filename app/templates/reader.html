@@ -1,43 +1,225 @@
-<!-- 
-    Page Purpose: N/A
-        - N/A
-
-    Supporting Files:
-        - Inheritance Layout: app\templates\layout.html
-        - CSS: app\static\css\reader.css
-        - JS: app\static\js\reader.js
-        - Python: 
-            - app\routes\reader.py
-
-    Notes: 
-        - N/A
-
-    Problems:
-        - N/A
-
-    Stuff to add:
-        - N/A
--->
-
 {% extends "layout.html" %}
 
 {% block title %}
-PDF Editor
+PDF Reader
+{% endblock %}
+
+
+{% block head %}
+
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/reader.css') }}"
+>
+
 {% endblock %}
 
 
 {% block content %}
 
-<div style="text-align: center; padding: 5rem 1rem;">
+<div
+    id="reader-app"
+    class="reader-container"
+>
 
-    <h1>
-        PDF Reader
-    </h1>
+    <header class="reader-header">
 
-    <p style="color: #64748b; margin-top: 1rem;">
-        Coming soon.
-    </p>
+        <div>
+
+            <span class="reader-label">
+                ACCESSIBILITY TOOL
+            </span>
+
+            <h1>
+                PDF Reader
+            </h1>
+
+            <p>
+                Listen to the text in your PDF using
+                text-to-speech.
+            </p>
+
+        </div>
+
+
+        <a
+            href="{{ url_for('main.index') }}"
+            class="reader-back-button"
+        >
+            Back to Documents
+        </a>
+
+    </header>
+
+
+    <section class="reader-toolbar">
+
+        <div class="reader-document-control">
+
+            <label for="reader-document-select">
+                Document
+            </label>
+
+            <select
+                id="reader-document-select"
+            >
+
+                {% for document in documents %}
+
+                <option
+                    value="{{ document.id }}"
+                    data-file-url="{{ document.file_url }}"
+                    {% if document.id|string == current_document_id|string %}
+                        selected
+                    {% endif %}
+                >
+                    {{ document.filename }}
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+
+        <div class="reader-controls">
+
+            <button
+                type="button"
+                id="reader-previous"
+            >
+                Previous
+            </button>
+
+
+            <span id="reader-page-status">
+                Page 1
+            </span>
+
+
+            <button
+                type="button"
+                id="reader-next"
+            >
+                Next
+            </button>
+
+
+            <button
+                type="button"
+                id="reader-play"
+                class="reader-primary"
+            >
+                Read Aloud
+            </button>
+
+
+            <button
+                type="button"
+                id="reader-pause"
+                disabled
+            >
+                Pause
+            </button>
+
+
+            <button
+                type="button"
+                id="reader-stop"
+                disabled
+            >
+                Stop
+            </button>
+
+
+            <label for="reader-speed">
+                Speed
+            </label>
+
+            <select id="reader-speed">
+
+                <option value="0.75">
+                    0.75x
+                </option>
+
+                <option
+                    value="1"
+                    selected
+                >
+                    1x
+                </option>
+
+                <option value="1.25">
+                    1.25x
+                </option>
+
+                <option value="1.5">
+                    1.5x
+                </option>
+
+                <option value="2">
+                    2x
+                </option>
+
+            </select>
+
+        </div>
+
+    </section>
+
+
+    <div
+        id="reader-status"
+        class="reader-status"
+        role="status"
+        aria-live="polite"
+    >
+        Loading PDF...
+    </div>
+
+
+    <section class="reader-workspace">
+
+        <div class="reader-pdf-area">
+
+            <canvas
+                id="reader-canvas"
+            ></canvas>
+
+        </div>
+
+
+        <aside class="reader-text-panel">
+
+            <h2>
+                Current Page Text
+            </h2>
+
+            <div
+                id="reader-text"
+                class="reader-text"
+            >
+                Loading text...
+            </div>
+
+        </aside>
+
+    </section>
 
 </div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"
+></script>
+
+<script
+    src="{{ url_for('static', filename='js/reader.js') }}"
+></script>
 
 {% endblock %}
