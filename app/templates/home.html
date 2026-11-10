@@ -118,6 +118,10 @@ Home - Text Editor
                         then click the "Upload PDF(s)" button to begin.
                     </p>
 
+                    <p class="upload-limit">
+                        Maximum of 10 PDFs per session.
+                    </p>
+
                 </div>
 
 
@@ -185,16 +189,16 @@ Home - Text Editor
 
             <!-- Success message -->
 
-            <div class="success-message">
+            <div class="success-message workspace-info">
 
-                <div class="success-icon">
-                    ✓
+                <div class="workspace-icon">
+                    📄
                 </div>
 
                 <div>
 
                     <strong>
-                        File uploaded successfully
+                        PDF Workspace
                     </strong>
 
 
@@ -467,6 +471,8 @@ Home - Text Editor
                 >
                     Add PDF(s)
                 </button>
+
+                <div id="workspace-upload-status"></div>
 
                 <input
                     type="file"

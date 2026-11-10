@@ -678,4 +678,51 @@
     #pdf-select {
         width: 100%;
     }
+
+    /* Neutral workspace information banner */
+    .workspace-info {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        color: #1e293b;
+    }
+
+    /* Document icon */
+    .workspace-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background: #e2e8f0;
+        font-size: 20px;
+        flex-shrink: 0;
+    }
+}
+
+/* =========================================
+   WORKSPACE UPLOAD ERROR
+   ========================================= */
+
+/* Red banner when upload fails */
+.workspace-info.upload-error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #991b1b;
+}
+
+/* Red document icon */
+.workspace-info.upload-error .workspace-icon {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+/* Error message underneath Add PDF(s) */
+#workspace-upload-status {
+    color: #dc2626;
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 8px;
 }

@@ -37,6 +37,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const addPdfButton =
         document.querySelector("#add-pdf-button");
 
+    const workspaceUploadStatus = 
+        document.querySelector("#workspace-upload-status");
+
     const deletePdfButton =
         document.querySelector("#delete-pdf-button");
 
@@ -67,6 +70,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const zoomLevel =
         document.querySelector("#pdf-zoom-level");
 
+    const workspaceBanner = 
+        document.querySelector(".workspace-info");
 
     // =========================================
     // DOCUMENT STATE
@@ -923,7 +928,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 }
 
-
                 // ---------------------------------
                 // SAVE THE RETURNED DOCUMENT LIST
                 // ---------------------------------
@@ -939,7 +943,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     );
 
                 }
-
 
                 // ---------------------------------
                 // UPDATE THE WORKSPACE
@@ -958,7 +961,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     result.current_id
                 );
 
+                // Reset banner color after successful upload.
+                workspaceBanner.classList.remove("upload-error");
 
+                // Clear any previous error message.
+                workspaceUploadStatus.textContent = "";
+                
                 // ---------------------------------
                 // SCROLL TO THE WORKSPACE
                 // ---------------------------------
@@ -1046,7 +1054,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (files.some(file => !isPdf(file))) {
 
-                statusElement.textContent =
+                workspaceUploadStatus.textContent =
                     "Please select PDF files only.";
 
                 additionalFileInput.value = "";
@@ -1084,7 +1092,7 @@ document.addEventListener("DOMContentLoaded", () => {
             addPdfButton.textContent =
                 "Adding...";
 
-            statusElement.textContent =
+            workspaceUploadStatus.textContent =
                 "Adding PDFs to your workspace...";
 
 
@@ -1157,16 +1165,20 @@ document.addEventListener("DOMContentLoaded", () => {
                     result.current_id
                 );
 
+                // Reset the banner after a successful upload.
+                workspaceBanner.classList.remove("upload-error");
 
                 // Clear the status message.
-                statusElement.textContent = "";
+                workspaceUploadStatus.textContent = "";
 
 
             } catch (error) {
 
                 // Display upload or server errors.
-                statusElement.textContent =
+                workspaceUploadStatus.textContent =
                     error.message;
+
+                workspaceBanner.classList.add("upload-error");
 
 
             } finally {
@@ -1300,6 +1312,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 if (!documents.length) {
 
+                    // Clear any previous error.
+                    workspaceBanner.classList.remove("upload-error");
+                    workspaceUploadStatus.textContent = "";
+
+                    // Clear any previous upload/delete messages.
+                    statusElement.textContent = "";
+
                     showUploadScreen();
 
                     return;
@@ -1320,6 +1339,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     result.current_id
                 );
 
+                // Reset the banner after successful deletion.
+                workspaceBanner.classList.remove("upload-error");
+
+                // Clear any previous upload error.
+                workspaceUploadStatus.textContent = "";
 
                 // Clear the status message.
                 statusElement.textContent = "";
