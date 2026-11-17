@@ -25,19 +25,166 @@
 PDF Editor
 {% endblock %}
 
+{% block head %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/split.css') }}"
+>
+{% endblock %}
 
 {% block content %}
 
-<div style="text-align: center; padding: 5rem 1rem;">
+<main
+    class="split-container"
+    id="split-app"
+    data-extract-url="{{ url_for('split.extract_selected_pages') }}"
+>
 
-    <h1>
-        PDF Splitter
-    </h1>
+    <header class="split-header">
+        <div>
+            <span class="split-eyebrow">PDF WORKSPACE</span>
 
-    <p style="color: #64748b; margin-top: 1rem;">
-        Coming soon.
-    </p>
+            <h1> PDF Split </h1>
 
-</div>
+            <p>
+                Choose the pages you want to keep. They are saved together
+                as a new PDF, and your original file stays as it is.
+            </p>
+        </div>
+
+        <a
+            class="split-back-button"
+            href="{{url_for('main.index') }}"
+        >
+            Back to Documents
+        </a>
+    </header>
+
+    <section class="split-panel">
+        
+        {% if documents %}
+
+        <div class="split-toolbar">
+            <div class="split-document-selector">
+                <label for="split-document-select">Document</label>
+                
+                <select id="split-document-select">
+                    {% for document in documents %}
+                    <option
+                        value="{{document.id}}"
+                        data-file-url="{{ document.file_url }}"
+                        data-filename="{{ document.filename }}"
+                        {% if document.id|string == current_document_id|string %}
+                        selected
+                        {% endif %}
+                    >
+                        {{ document.filename }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="split-toolbar-buttons">
+                <button
+                    type="button"
+                    id="split-select-all"
+                    class="split-button"
+                    disabled
+                >
+                    Select all
+                </button>
+                
+                <button
+                    type="button"
+                    id = "split-clear"
+                    class="split-button"
+                    disabled
+                >
+                    Clear
+                </button>
+
+                <button
+                    type="button"
+                    id = "split-save"
+                    class="split-button split-button-primary"
+                    disabled
+                >
+                    Download selected pages
+                </button>
+            </div>
+        </div>
+
+        <div class="split-summary">
+            <div>
+                <h2>Pages</h2>
+
+                
+            </div>
+
+            <span
+                id="split-page-count"
+                class="split-page-count"
+            >
+                Loading pages...
+            </span>
+        </div>
+
+        <div
+            id="split-status"
+            class="split-status"
+            role="status"
+            aria-live="polite"
+        >
+            Loading PDF...
+        </div>
+
+        <div
+            id="split-error"
+            class="split-error"
+            role="alert"
+            hidden
+        ></div>
+
+        <div
+            id="split-page-grid"
+            class="split-page-grid"
+            aria-label="PDF pages. Select the pages to keep."
+        ></div>
+
+        <div class="split-footer">
+            <p>
+                The original uploaded PDF is not overwritten.
+            </p>
+
+           
+        </div>
+
+        {% else %}
+
+        <div class="split-empty-state">
+            <h2>No uploaded PDFs found</h2>
+
+            <p>
+                Return to Documents and upload a PDF before splitting it.
+            </p>
+
+            <a
+                class="split-button split-button-primary"
+                href="{{ url_for('main.index') }}"
+            >
+                Go to Documents
+            </a>
+        </div>
+
+        {% endif %}
+    </section>
+</main>
+
+{% if documents %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="{{ url_for('static', filename='js/split.js') }}"></script>
+{% endif %}
 
 {% endblock %}
+
+      
