@@ -76,8 +76,13 @@ PDF Converter
                 
                 <select id="convert-document-select" name="document_id">
                     {% for document in documents %}
-                    <option value="{{document.id}}">
-                        {{document.filename}}
+                    <option
+                        value="{{ document.id }}"
+                        {% if document.id|string == current_document_id|string %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ document.filename }}
                     </option>
                     {% endfor %}
                 </select>
