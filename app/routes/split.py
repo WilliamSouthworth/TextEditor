@@ -152,7 +152,11 @@ def split_page():
         for d in documents
     ]
 
-    current_document_id = request.args.get("document", "")
+    current_document_id = (
+        request.args.get("document")
+        or session.get("current_pdf_id")
+        or ""
+    )
 
     return render_template(
         "split.html",

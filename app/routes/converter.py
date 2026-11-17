@@ -79,19 +79,25 @@ def converter_page():
     """
     Display the PDF converter page.
     """
+
     documents = _get_convertable_documents()
 
     public_documents = [
         {
-            "id": d["id"], 
-            "filename": d["filename"]
+            "id": document["id"],
+            "filename": document["filename"],
         }
-        for d in documents
+        for document in documents
     ]
+
+    current_document_id = session.get(
+        "current_pdf_id"
+    )
 
     return render_template(
         "converter.html",
         documents=public_documents,
+        current_document_id=current_document_id,
     )
 
 @converter.route("/converter/convert", methods=["POST"])

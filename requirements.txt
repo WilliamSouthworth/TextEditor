@@ -8,3 +8,4 @@ pymupdf==1.28.2
 pypdf==6.18.1
 python-dotenv==1.2.4
 Werkzeug==3.1.8
+pdf2docx==0.5.13
