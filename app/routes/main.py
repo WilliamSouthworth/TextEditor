@@ -15,6 +15,8 @@ from flask import (
 
 from werkzeug.utils import secure_filename
 
+#Maxiumum PDFs a User can have uploaded
+MAX_PDFS = 10
 
 main = Blueprint("main", __name__)
 
@@ -101,6 +103,30 @@ def upload_pdf():
         return jsonify({
             "error": "Please select at least one PDF."
         }), 400
+
+
+    # ------------------------------------
+    # Enforce maximum PDF limit
+    # ------------------------------------
+
+    documents = get_documents()
+
+    current_count = len(documents)
+    new_count = len(uploaded_files)
+
+    if current_count + new_count > MAX_PDFS:
+        remaining = MAX_PDFS - current_count
+
+        return jsonify({
+            "error": (
+                f"You can upload a maximum of "
+                f"{MAX_PDFS} PDFs. "
+                f"You currently have {current_count} "
+                f"and can upload {max(0, remaining)} more."
+            )
+        }), 400
+
+    
 
     # -------------------------------------
     # Validate the selected files
