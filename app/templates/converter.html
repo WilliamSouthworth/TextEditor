@@ -1,6 +1,6 @@
 <!-- 
     Page Purpose: N/A
-        - N/A
+        - Converts the PDF into different file types for the user to download
 
     Supporting Files:
         - Inheritance Layout: app\templates\layout.html
@@ -22,22 +22,132 @@
 {% extends "layout.html" %}
 
 {% block title %}
-PDF Editor
+PDF Converter
 {% endblock %}
 
 
+{% block head %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/converter.css') }}"
+>
+{% endblock %}
+
 {% block content %}
 
-<div style="text-align: center; padding: 5rem 1rem;">
+{% set format_labels = {
+    "txt": "Plain text (.txt)",
+    "png": "PNG images, one per page (.zip)",
+    "docx": "Word document (.docx)"
+} %}
 
-    <h1>
-        PDF Converter
-    </h1>
+<main
+    class="convert-container"
+    id="convert-app"
+    data-convert-url="{{ url_for('converter.convert_document') }}"
+>
+    <header class="convert-header">
+        <div>
+            <span class="convert-eyebrow">PDF WORKSPACE</span>
 
-    <p style="color: #64748b; margin-top: 1rem;">
-        Coming soon.
-    </p>
+            <h1> PDF Converter </h1>
 
-</div>
+            <p>
+                Choose an uploaded PDF and a file type. Your converted
+                file downloads as soon as it is ready
+            </p>
+        </div>
+
+        <a
+            class="convert-back-button"
+            href="{{url_for('main.index') }}"
+        >
+            Back to Documents
+        </a>
+    </header>
+
+    <section class="convert-panel">
+
+        {% if documents %}
+
+        <form id="convert-form" class="convert-form" novalidate>
+            <div class="convert-field">
+                <label for="convert-document-select">Document</label>
+                
+                <select id="convert-document-select" name="document_id">
+                    {% for document in documents %}
+                    <option value="{{document.id}}">
+                        {{document.filename}}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="convert-field">
+                <label for="convert-format-select">Convert to</label>
+
+                <select id="convert-format-select" name="format">
+                    {% for fmt in formats|default(["txt", "png", "docx"]) %}
+                    <option value="{{ fmt }}">
+                        {{ format_labels.get(fmt, fmt)}}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button
+                type="submit"
+                id="convert-submit"
+                class="convert-button convert-button-primary"
+            >
+                Convert and download
+            </button>
+        </form>
+
+        <div
+            id="convert-status"
+            class="convert-status"
+            role="status"
+            aria-live="polite"
+            hidden
+        ></div>
+
+        <div
+            id="convert-error"
+            class="convert-error"
+            role="alert"
+            hidden
+        ></div>
+
+        <p class="convert-note">
+            Layout is preserved as closely as possible, but complex PDFs
+            may look different after conversion. Scanned PDFs have no 
+            text to extract
+        </p>
+
+        {% else %}
+
+        <div class="convert-empty-state">
+            <h2>No uploaded PDFs found</h2>
+
+            <p>
+                Return to Documents and upload a PDF before converting
+            </p>
+
+            <a
+            class="convert-button convert-button-primary"
+            href="{{ url_for('main.index') }}"
+            >
+                Go to Documents
+            </a>
+        </div>
+
+        {% endif %}
+    </section>
+</main>
+
+{% if documents %}
+<script src="{{ url_for('static', filename='js/converter.js') }}"></script>
+{% endif %}
 
 {% endblock %}
