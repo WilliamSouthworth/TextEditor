@@ -17,9 +17,8 @@ The application supports:
 - Saving and downloading an edited copy of a PDF
 - Merging multiple PDFs in a selected order
 - Reordering, rotating, and removing PDF pages
-- Splitting PDFs into separate documents
-- Converting PDFs to other supported file formats
-- Exporting modified PDFs
+- Extracting selected pages into a new PDF
+- Converting PDFs to TXT, DOCX, or PNG images packaged as a ZIP
 - Reading PDF text aloud using text-to-speech
 - Pausing, resuming, and stopping text-to-speech playback
 - Adjusting text-to-speech reading speed
@@ -41,5 +40,65 @@ The project uses:
 - **PDF-Lib** - Creating edited PDF copies in the browser
 - **PyMuPDF** - PDF processing
 - **pypdf** - PDF merging, splitting, sorting, and other document operations
+- **pdf2docx** - PDF-to-DOCX conversion
 - **Web Speech API** - Text-to-speech functionality
 - **Git/GitHub** - Version control and team collaboration
+
+## Setup
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/WilliamSouthworth/TextEditor.git
+cd TextEditor
+```
+
+### 2. Create a Virtual Environment
+
+```bash
+python -m venv .venv
+```
+
+Activate the virtual environment.
+
+On macOS/Linux:
+
+```bash
+source .venv/bin/activate
+```
+
+On Windows:
+
+```bash
+.venv\Scripts\activate
+```
+
+### 3. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Configure Environment Variables
+
+Create a `.env` file in the root directory of the project.
+
+You can use `.env.example` as a reference:
+
+```text
+SECRET_KEY=your-secret-key-here
+```
+
+Replace the example value with your own Flask secret key.
+
+### 5. Run the Application
+
+```bash
+python run.py
+```
+
+Open the local Flask URL displayed in the terminal, typically:
+
+```text
+http://127.0.0.1:5000
+```
